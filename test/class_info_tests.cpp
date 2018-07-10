@@ -36,6 +36,11 @@ public:
 		test_variable = value;
 	}
 
+	TestClass(int value1, double value2)
+	{
+		test_variable = value1 + (int)value2;
+	}
+
 	~TestClass()
 	{
 
@@ -100,22 +105,33 @@ TEST(ClassInfo, TestDefaultConstructor)
 	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 2);
 }
 
-// Tests passing a simple script to the V8 engine and
-// checking the return value.
-/*TEST(ClassInfo, TestSimpleConstructor)
+// Tests creating a value, and retrieving a value.
+TEST(ClassInfo, TestConstructorOneArg)
 {
 	ClassInfo class_info = RegisterClassInfo<TestClass>()
-		.register_constructor()
-		.register_method("get_variable", &TestClass::get_variable)
-		.register_method("set_variable", &TestClass::set_variable)
+		.register_constructor<int>()
 		.register_class();
 
-	ObjectInstance inst = class_info.create_new();
+	FunctionParameters params;
+	params.add(200);
 
-	FunctionParams params;
-	params.add(3);
+	ObjectInstance inst = class_info.create_new(params);
 
-	inst.call("set_variable", params);
+	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 200);
+}
 
-	ASSERT_EQ(inst.call("get_variable").as<int>(), 3);
-}*/
+// Tests creating a value, and retrieving a value.
+TEST(ClassInfo, TestConstructorTwoArgs)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor<int, double>()
+		.register_class();
+
+	FunctionParameters params;
+	params.add(200);
+	params.add(50.0);
+
+	ObjectInstance inst = class_info.create_new(params);
+
+	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 250);
+}
