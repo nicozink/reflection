@@ -22,6 +22,10 @@ class ClassInfo
 {
 public:
 
+	void add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function);
+
+	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name, FunctionParameters params);
+
 	ObjectInstance create_new();
 
 	ObjectInstance create_new(FunctionParameters params);

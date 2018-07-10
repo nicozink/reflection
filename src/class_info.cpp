@@ -6,6 +6,18 @@
 
 #include <reflection/class_info.h>
 
+void ClassInfo::add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function)
+{
+	member_functions.insert({ function_name, function });
+}
+
+ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::string function_name, FunctionParameters params)
+{
+	auto& function = member_functions[function_name];
+
+	return function(instance, params);
+}
+
 ObjectInstance ClassInfo::create_new()
 {
 	return create_new(FunctionParameters());

@@ -8,7 +8,7 @@
 #define reflection_cpp_function_h
 
 // Local Includes
-#include "cpp_extrtact_parameters.h"
+#include "cpp_parameters.h"
 
 // Project Includes
 
@@ -19,90 +19,72 @@
 template<class TFunc>
 class CppFunction
 {
-  public:
+public:
   
-    // Calls the method using the provided function parameters.
-    static ObjectInstance Call(FunctionParameters params);
+	// Calls the method using the provided function parameters.
+	static ObjectInstance Call(FunctionParameters params);
 };
 
 // Stores a function which is called from within Lua code.
 // @type T The class type to be constructed.
 // @type Args... The arguments passed to the constructor.
 template <typename T, typename... Args>
-class LuaCppFunction<void (T::*)(Args...)>
+class CppFunction<void (T::*)(Args...)>
 {
-  typedef void (T::*TFunc)(Args...);
+	typedef void (T::*TFunc)(Args...);
   
-  public:
+public:
   
-    // Calls the method using the provided function parameters.
-    static ObjectInstance Call(FunctionParameters params)
-    {
-      // The function which we need to call is contained on the stack
-      // as user data. We fetch it first.
+	// Calls the method using the provided function parameters.
+	static ObjectInstance Call(ObjectInstance& inst, TFunc function, FunctionParameters params)
+	{
+		ObjectInstance to_return;
+
+		// We construct a Lambda expression which will call
+		// the function once we have reconstructed the list
+		// of parameters.
+		auto call_function = [&to_return, &inst, function](Args... args)
+		{
+			T& object_instance = inst.get_value<T>();
+			(object_instance.*function)(args...);
+		};
       
-      void* userData = lua_touserdata(luaState, lua_upvalueindex(1));
+		// we reconstruct the parameters and call the function.
+		CppParameters<sizeof...(Args), Args...>::Call(std::function<void (Args...)>(call_function), params);
       
-      TFunc const& function = *static_cast<TFunc const*>(userData);
-      
-      // We get the object of which the method is a member.
-      
-      T* obj = LuaState<T*>::Get(luaState, 1);
-      
-      // We construct a Lambda expression which will call
-      // the function once we have reconstructed the list
-      // of parameters.
-      auto callFn = [obj, function, luaState](Args... args)
-      {
-        (obj->*function)(args...);
-      };
-      
-      // we reconstruct the parameters and call the function.
-      LuaCppParameters<sizeof...(Args), Args...>::Call(std::function<void (Args...)>(callFn), luaState);
-      
-      return 0;
-    }
+		return to_return;
+	}
 };
 
 // Stores a function which is called from within Lua code.
 // @type T The class type to be constructed.
 // @type Args... The arguments passed to the constructor.
 template <typename T, typename TReturn, typename... Args>
-class LuaCppFunction<TReturn (T::*)(Args...)>
+class CppFunction<TReturn (T::*)(Args...)>
 {
-  typedef TReturn (T::*TFunc)(Args...);
+	typedef TReturn (T::*TFunc)(Args...);
   
-  public:
+public:
   
-    // Calls the method using the provided function parameters.
-    static int Call(lua_State* luaState)
-    {
-      // The function which we need to call is contained on the stack
-      // as user data. We fetch it first.
-      
-      void* userData = lua_touserdata(luaState, lua_upvalueindex(1));
-      
-      TFunc const& function = *static_cast<TFunc const*>(userData);
-      
-      // We get the object of which the method is a member.
-      
-      T* obj = LuaState<T*>::Get(luaState, 1);
-      
-      // We construct a Lambda expression which will call
-      // the function once we have reconstructed the list
-      // of parameters.
-      auto callFn = [obj, function, luaState](Args... args)
-      {
-        TReturn result = (obj->*function)(args...);
-        
-        LuaState<TReturn>::Push(luaState, result);
-      };
-      
-      // we reconstruct the parameters and call the function.
-      LuaCppParameters<sizeof...(Args), Args...>::Call(std::function<void (Args...)>(callFn), luaState);
-      
-      return 1;
-    }
+	// Calls the method using the provided function parameters.
+	static int Call(ObjectInstance inst, TFunc function, FunctionParameters params)
+	{
+		ObjectInstance to_return;
+
+		// We construct a Lambda expression which will call
+		// the function once we have reconstructed the list
+		// of parameters.
+		auto call_function = [&to_return, inst, function](Args... args)
+		{
+			T object_instance = inst.get_value<T>();
+			to_return.set_value<TReturn>((object_instance.*function)(args...));
+		};
+
+		// we reconstruct the parameters and call the function.
+		CppParameters<sizeof...(Args), Args...>::Call(std::function<void(Args...)>(call_function), params);
+
+		return to_return;
+	}
 };
 
 #endif

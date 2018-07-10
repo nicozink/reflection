@@ -135,3 +135,22 @@ TEST(ClassInfo, TestConstructorTwoArgs)
 
 	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 250);
 }
+
+
+// Tests creating a value, and retrieving a value.
+TEST(ClassInfo, TestMethodCallSetter)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor()
+		.register_method("set_variable", &TestClass::set_variable)
+		.register_class();
+
+	ObjectInstance inst = class_info.create_new();
+
+	FunctionParameters params;
+	params.add(200);
+
+	class_info.call_member_function(inst, "set_variable", params);
+
+	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 200);
+}

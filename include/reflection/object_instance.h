@@ -22,7 +22,7 @@ public:
 	ObjectInstance call(std::string function_name);
 
 	template <typename T>
-	T get_value();
+	T& get_value() const;
 
 	template <typename T>
 	void set_value(T value);
@@ -33,7 +33,7 @@ private:
 };
 
 template <typename T>
-T ObjectInstance::get_value()
+T& ObjectInstance::get_value() const
 {
 	return value.get<T>();
 }
