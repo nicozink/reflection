@@ -88,6 +88,18 @@ TEST(ClassInfo, TestSimpleConstructor)
 	ASSERT_EQ(inst.get_value<int>(), 100);
 }
 
+// Tests creating a value, and retrieving a value.
+TEST(ClassInfo, TestDefaultConstructor)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor()
+		.register_class();
+
+	ObjectInstance inst = class_info.create_new();
+
+	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 2);
+}
+
 // Tests passing a simple script to the V8 engine and
 // checking the return value.
 /*TEST(ClassInfo, TestSimpleConstructor)

@@ -22,7 +22,11 @@ class ClassInfo
 {
 public:
 
+	ObjectInstance create_new();
+
 	ObjectInstance create_new(FunctionParameters params);
+
+	ObjectInstance create_new_ptr();
 
 	ObjectInstance create_new_ptr(FunctionParameters params);
 

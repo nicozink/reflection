@@ -6,9 +6,19 @@
 
 #include <reflection/class_info.h>
 
+ObjectInstance ClassInfo::create_new()
+{
+	return create_new(FunctionParameters());
+}
+
 ObjectInstance ClassInfo::create_new(FunctionParameters params)
 {
 	return value_constructor(params);
+}
+
+ObjectInstance ClassInfo::create_new_ptr()
+{
+	return create_new_ptr(FunctionParameters());
 }
 
 ObjectInstance ClassInfo::create_new_ptr(FunctionParameters params)
