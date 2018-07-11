@@ -97,7 +97,8 @@ template <class TFunc>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_method(const std::string name, TFunc function)
 {
 	auto call_function = [function](ObjectInstance& inst, FunctionParameters params)->ObjectInstance {
-		return CppFunction<TFunc>::Call(inst, function, params);
+		ObjectInstance to_return = CppFunction<TFunc>::Call(inst, function, params);
+		return to_return;
 	};
 
 	class_info.add_member_function(name, call_function);

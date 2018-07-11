@@ -46,10 +46,21 @@ public:
 
 	}
 
+	void add_numbers(int value1, double value2)
+	{
+		test_variable = value1 + (int)value2;
+	}
+
 	// Gets the variable.
 	int get_variable()
 	{
 		return test_variable;
+	}
+
+	// Gets the variable.
+	void test_method()
+	{
+		test_variable = 125;
 	}
 
 	// Sets the variable to the specified value.
@@ -136,9 +147,23 @@ TEST(ClassInfo, TestConstructorTwoArgs)
 	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 250);
 }
 
+// Tests creating a value, and retrieving a value.
+TEST(ClassInfo, TestMethodCallMethodNoArgs)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor()
+		.register_method("test_method", &TestClass::test_method)
+		.register_class();
+
+	ObjectInstance inst = class_info.create_new();
+
+	class_info.call_member_function(inst, "test_method");
+
+	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 125);
+}
 
 // Tests creating a value, and retrieving a value.
-TEST(ClassInfo, TestMethodCallSetter)
+TEST(ClassInfo, TestMethodCallMethodOneArg)
 {
 	ClassInfo class_info = RegisterClassInfo<TestClass>()
 		.register_constructor()
@@ -153,4 +178,41 @@ TEST(ClassInfo, TestMethodCallSetter)
 	class_info.call_member_function(inst, "set_variable", params);
 
 	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 200);
+}
+
+// Tests creating a value, and retrieving a value.
+TEST(ClassInfo, TestMethodCallMethodTwoArgs)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor()
+		.register_method("add_numbers", &TestClass::add_numbers)
+		.register_class();
+
+	ObjectInstance inst = class_info.create_new();
+
+	FunctionParameters params;
+	params.add(200);
+	params.add(50.0);
+
+	class_info.call_member_function(inst, "add_numbers", params);
+
+	ASSERT_EQ(inst.get_value<TestClass>().get_variable(), 250);
+}
+
+// Tests getting a value.
+TEST(ClassInfo, TestMethodGetter)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor<int>()
+		.register_method("get_variable", &TestClass::get_variable)
+		.register_class();
+
+	FunctionParameters constructor_params;
+	constructor_params.add(200);
+
+	ObjectInstance inst = class_info.create_new(constructor_params);
+
+	ObjectInstance return_value = class_info.call_member_function(inst, "get_variable");
+
+	ASSERT_EQ(return_value.get_value<TestClass>().get_variable(), 200);
 }

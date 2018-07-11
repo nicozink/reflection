@@ -22,7 +22,7 @@ class CppFunction
 public:
   
 	// Calls the method using the provided function parameters.
-	static ObjectInstance Call(FunctionParameters params);
+	static ObjectInstance Call(ObjectInstance& inst, TFunc function, FunctionParameters params);
 };
 
 // Stores a function which is called from within Lua code.
@@ -67,7 +67,7 @@ class CppFunction<TReturn (T::*)(Args...)>
 public:
   
 	// Calls the method using the provided function parameters.
-	static int Call(ObjectInstance inst, TFunc function, FunctionParameters params)
+	static ObjectInstance Call(ObjectInstance inst, TFunc function, FunctionParameters params)
 	{
 		ObjectInstance to_return;
 
