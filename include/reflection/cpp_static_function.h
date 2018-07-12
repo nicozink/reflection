@@ -8,64 +8,48 @@
 #define lua_bindings_lua_static_cpp_function_h
 
 // Local Includes
-#include "lua_cpp_parameters.h"
-#include "lua_state.h"
-
-// Project Includes
+#include "cpp_parameters.h"
 
 // External Includes
 #include <tuple>
 
-// Lua Includes
-extern "C"
-{
-  #include "lua.h"
-  #include "lualib.h"
-  #include "lauxlib.h"
-}
-
 // A class which is used to call a Lua function.
 template<class TFunc>
-class LuaStaticCppFunction
+class CppStaticFunction
 {
 public:
 
 	// Calls the method using the provided Lua state.
-	static int Call(lua_State* luaState);
+	static ObjectInstance Call(TFunc function, FunctionParameters params);
 };
 
 // Stores a function which is called from within Lua code.
 // @type T The class type to be constructed.
 // @type Args... The arguments passed to the constructor.
 template <typename... Args>
-class LuaStaticCppFunction<void (*)(Args...)>
+class CppStaticFunction<void (*)(Args...)>
 {
 	typedef void (*TFunc)(Args...);
 
 public:
 
 	// Calls the method using the provided Lua state.
-	static int Call(lua_State* luaState)
+	static ObjectInstance Call(TFunc function, FunctionParameters params)
 	{
-		// The function which we need to call is contained on the stack
-		// as user data. We fetch it first.
-
-		void* userData = lua_touserdata(luaState, lua_upvalueindex(1));
-
-		TFunc const& function = *static_cast<TFunc const*>(userData);
+		ObjectInstance to_return;
 
 		// We construct a Lambda expression which will call
 		// the function once we have reconstructed the list
 		// of parameters.
-		auto callFn = [function, luaState](Args... args)
+		auto call_function = [&to_return, function](Args... args)
 		{
 			function(args...);
 		};
 
 		// we reconstruct the parameters and call the function.
-		LuaCppParameters<sizeof...(Args), Args...>::Call(std::function<void(Args...)>(callFn), luaState);
+		CppParameters<sizeof...(Args), Args...>::Call(std::function<void(Args...)>(call_function), params);
 
-		return 0;
+		return to_return;
 	}
 };
 
@@ -73,36 +57,29 @@ public:
 // @type T The class type to be constructed.
 // @type Args... The arguments passed to the constructor.
 template <typename TReturn, typename... Args>
-class LuaStaticCppFunction<TReturn(*)(Args...)>
+class CppStaticFunction<TReturn(*)(Args...)>
 {
 	typedef TReturn(*TFunc)(Args...);
 
 public:
 
 	// Calls the method using the provided Lua state.
-	static int Call(lua_State* luaState)
+	static ObjectInstance Call(TFunc function, FunctionParameters params)
 	{
-		// The function which we need to call is contained on the stack
-		// as user data. We fetch it first.
-
-		void* userData = lua_touserdata(luaState, lua_upvalueindex(1));
-
-		TFunc const& function = *static_cast<TFunc const*>(userData);
+		ObjectInstance to_return;
 
 		// We construct a Lambda expression which will call
 		// the function once we have reconstructed the list
 		// of parameters.
-		auto callFn = [function, luaState](Args... args)
+		auto call_function = [&to_return, function](Args... args)
 		{
-			TReturn result = function(args...);
-
-			LuaState<TReturn>::Push(luaState, result);
+			to_return.set_value<TReturn>(function(args...));
 		};
 
 		// we reconstruct the parameters and call the function.
-		LuaCppParameters<sizeof...(Args), Args...>::Call(std::function<void(Args...)>(callFn), luaState);
+		CppParameters<sizeof...(Args), Args...>::Call(std::function<void(Args...)>(call_function), params);
 
-		return 1;
+		return to_return;
 	}
 };
 

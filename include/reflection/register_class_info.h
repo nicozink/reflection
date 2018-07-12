@@ -12,6 +12,7 @@
 // Local Includes
 #include "class_info.h"
 #include "cpp_function.h"
+#include "cpp_static_function.h"
 #include "function_parameters.h"
 #include "object_constructor.h"
 #include "object_instance.h"
@@ -102,6 +103,23 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_method(const std::s
 	};
 
 	class_info.add_member_function(name, call_function);
+
+	return *this;
+}
+
+// Registers a static method against the class.
+// @param name The function name.
+// @param function The function.
+template <typename TType>
+template <class TFunc>
+RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_static_method(const std::string name, TFunc function)
+{
+	auto call_function = [function](FunctionParameters params)->ObjectInstance {
+		ObjectInstance to_return = CppStaticFunction<TFunc>::Call(function, params);
+		return to_return;
+	};
+
+	class_info.add_static_function(name, call_function);
 
 	return *this;
 }

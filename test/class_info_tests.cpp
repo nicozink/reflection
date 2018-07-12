@@ -23,6 +23,25 @@ class TestClass
 public:
 
 	//
+	// Static Methods
+	//
+
+	static int get_static_number()
+	{
+		return static_number;
+	}
+
+	static void set_static_number(int value)
+	{
+		static_number = value;
+	}
+
+	static int subtract_numbers(int v1, int v2)
+	{
+		return v1 - v2;
+	}
+
+	//
 	// Constructors
 	//
 
@@ -71,7 +90,11 @@ public:
 
 	// Stores a variable used to test V8 functionality.
 	int test_variable;
+
+	static int static_number;
 };
+
+int TestClass::static_number = 0;
 
 //
 // Test Methods
@@ -215,4 +238,38 @@ TEST(ClassInfo, TestMethodGetter)
 	ObjectInstance return_value = class_info.call_member_function(inst, "get_variable");
 
 	ASSERT_EQ(return_value.get_value<TestClass>().get_variable(), 200);
+}
+
+// Tests calling a static method.
+TEST(ClassInfo, TestStaticMethod)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_static_method("subtract_numbers", &TestClass::subtract_numbers)
+		.register_class();
+
+	FunctionParameters params;
+	params.add(200);
+	params.add(50);
+
+	ObjectInstance return_value = class_info.call_static_function("subtract_numbers", params);
+
+	ASSERT_EQ(return_value.get_value<int>(), 150);
+}
+
+// Tests calling a static method.
+TEST(ClassInfo, TestStaticSetterGetter)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_static_method("get_static_number", &TestClass::get_static_number)
+		.register_static_method("set_static_number", &TestClass::set_static_number)
+		.register_class();
+
+	FunctionParameters params;
+	params.add(225);
+
+	class_info.call_static_function("set_static_number", params);
+
+	ObjectInstance return_value = class_info.call_static_function("get_static_number");
+
+	ASSERT_EQ(return_value.get_value<int>(), 225);
 }

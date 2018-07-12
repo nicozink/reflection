@@ -11,6 +11,11 @@ void ClassInfo::add_member_function(std::string function_name, std::function<Obj
 	member_functions.insert({ function_name, function });
 }
 
+void ClassInfo::add_static_function(std::string function_name, std::function<ObjectInstance(FunctionParameters)> function)
+{
+	static_functions.insert({ function_name, function });
+}
+
 ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::string function_name)
 {
 	FunctionParameters params;
@@ -23,6 +28,20 @@ ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::str
 	auto& function = member_functions[function_name];
 
 	return function(instance, params);
+}
+
+ObjectInstance ClassInfo::call_static_function(std::string function_name)
+{
+	FunctionParameters params;
+
+	return call_static_function(function_name, params);
+}
+
+ObjectInstance ClassInfo::call_static_function(std::string function_name, FunctionParameters params)
+{
+	auto& function = static_functions[function_name];
+
+	return function(params);
 }
 
 ObjectInstance ClassInfo::create_new()
