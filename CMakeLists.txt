@@ -16,6 +16,7 @@ set(SRC_INTERFACE
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/class_info.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/cpp_function.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/cpp_parameters.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/cpp_property.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/cpp_static_function.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/function_parameters.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/object_constructor.h

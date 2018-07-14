@@ -273,3 +273,23 @@ TEST(ClassInfo, TestStaticSetterGetter)
 
 	ASSERT_EQ(return_value.get_value<int>(), 225);
 }
+
+// Tests setting and getting a variable.
+TEST(ClassInfo, TestPropertySetterGetter)
+{
+	ClassInfo class_info = RegisterClassInfo<TestClass>()
+		.register_constructor()
+		.register_property("test_variable", &TestClass::test_variable)
+		.register_class();
+
+	ObjectInstance inst = class_info.create_new();
+
+	ObjectInstance input_value;
+	input_value.set_value(225);
+
+	class_info.set_property(inst, "test_variable", input_value);
+
+	ObjectInstance return_value = class_info.get_property(inst, "test_variable");
+
+	ASSERT_EQ(return_value.get_value<int>(), 225);
+}

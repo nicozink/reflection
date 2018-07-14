@@ -29,6 +29,16 @@ void ClassInfo::add_static_function(std::string function_name, std::function<Obj
 	static_functions.insert({ function_name, function });
 }
 
+void ClassInfo::add_set_property(std::string property_name, std::function<void(ObjectInstance, ObjectInstance)> property_function)
+{
+	property_setters.insert({ property_name, property_function });
+}
+
+void ClassInfo::add_get_property(std::string property_name, std::function<ObjectInstance(ObjectInstance)> property_function)
+{
+	property_getters.insert({ property_name, property_function });
+}
+
 ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::string function_name)
 {
 	FunctionParameters params;
@@ -80,6 +90,20 @@ ObjectInstance ClassInfo::create_new_ptr(FunctionParameters params)
 ObjectInstance ClassInfo::create_null()
 {
 	return null_constructor();
+}
+
+ObjectInstance ClassInfo::get_property(ObjectInstance instance, std::string property_name)
+{
+	auto& property_function = property_getters[property_name];
+
+	return property_function(instance);
+}
+
+void ClassInfo::set_property(ObjectInstance instance, std::string property_name, ObjectInstance value)
+{
+	auto& property_function = property_setters[property_name];
+
+	property_function(instance, value);
 }
 
 void ClassInfo::set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function)

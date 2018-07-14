@@ -12,6 +12,7 @@
 // Local Includes
 #include "class_info.h"
 #include "cpp_function.h"
+#include "cpp_property.h"
 #include "cpp_static_function.h"
 #include "function_parameters.h"
 #include "object_constructor.h"
@@ -103,6 +104,26 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_method(const std::s
 	};
 
 	class_info.add_member_function(name, call_function);
+
+	return *this;
+}
+
+template <typename TType>
+template <class TProp>
+RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_property(const std::string name, TProp property)
+{
+	auto property_setter = [property](ObjectInstance inst, ObjectInstance value) {
+		CppProperty<TProp>::Set(inst, property, value);
+	};
+
+	class_info.add_set_property(name, property_setter);
+
+	auto property_getter = [property](ObjectInstance inst)->ObjectInstance {
+		ObjectInstance to_return = CppProperty<TProp>::Get(inst, property);
+		return to_return;
+	};
+
+	class_info.add_get_property(name, property_getter);
 
 	return *this;
 }
