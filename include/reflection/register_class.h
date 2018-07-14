@@ -6,22 +6,26 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_register_class_h
-#define cpp_util_reflection_register_class_h
+#ifndef reflection_register_class_h
+#define reflection_register_class_h
 
 // Local Includes
-#include "class_info.h"
+#include "reflection.h"
+#include "register_class_info.h"
 
 #define REGISTER_CLASS_AS(TType, TName) \
-	class ScriptableClassInfo; \
-	class Bind##TName : ScriptableClass<TType> { \
+	class Bind##TName : RegisterClassInfo<TType> { \
 	public: \
-		void register_class(); \
-	private:
-		static ScriptableObject* scriptable_object_info; \
+		ClassInfo get_class_info() { \
+			register_class_details(); \
+			return register_class(); \
+		} \
+		void register_class_details(); \
+	private: \
+		static ClassInfo class_info; \
 	}; \
-	ScriptableObject* Bind##TName::scriptable_object_info = Scriptable::RegisterObject(#TName, new Bind##TName()); \
-	void Bind##TName::register_class()
+	ClassInfo Bind##TName::class_info = Reflection::RegisterClass(#TName, Bind##TName().get_class_info()); \
+	void Bind##TName::register_class_details()
 
 #define REGISTER_CLASS(TType) REGISTER_CLASS_AS(TType, TType)
 

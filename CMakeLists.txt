@@ -20,16 +20,19 @@ set(SRC_INTERFACE
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/function_parameters.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/object_constructor.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/object_instance.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/reflection.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/register_class_info.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/register_class.h)
 
 set(SRC_MAIN
 	${CMAKE_CURRENT_SOURCE_DIR}/src/class_info.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/function_parameters.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/object_instance.cpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/object_instance.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/reflection.cpp)
 	
 set(SRC_TEST
-	${CMAKE_CURRENT_SOURCE_DIR}/test/class_info_tests.cpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/test/class_info_tests.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/test/reflection_tests.cpp)
 
 set(_src_root_path "${CMAKE_CURRENT_SOURCE_DIR}/")
 
