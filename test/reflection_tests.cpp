@@ -39,11 +39,9 @@ REGISTER_CLASS(TestClass)
 // Tests creating a new null value.
 TEST(Reflection, TestRegisterClass)
 {
-	ClassInfo class_info = RegisterClassInfo<TestClass>()
-	.register_constructor()
-	.register_class();
-
-	ObjectInstance inst = class_info.create_null();
+	std::shared_ptr<ClassInfo> class_info = Reflection<TestClass>::GetInstance().get_class_info();
+	
+	ObjectInstance inst = class_info->create_null();
 
 	ASSERT_EQ(inst.get_value<TestClass*>(), nullptr);
 }

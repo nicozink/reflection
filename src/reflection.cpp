@@ -5,8 +5,3 @@
  */
 
 #include <reflection/reflection.h>
-
-ClassInfo Reflection::RegisterClass(std::string name, ClassInfo class_info)
-{
-	return class_info;
-}

@@ -6,6 +6,19 @@
 
 #include <reflection/class_info.h>
 
+ClassInfo& ClassInfo::operator=(ClassInfo& other)
+{
+	value_constructor = other.value_constructor;
+	pointer_constructor = other.pointer_constructor;
+	null_constructor = other.null_constructor;
+
+	member_functions = other.member_functions;
+
+	static_functions = other.static_functions;
+
+	return *this;
+}
+
 void ClassInfo::add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function)
 {
 	member_functions.insert({ function_name, function });

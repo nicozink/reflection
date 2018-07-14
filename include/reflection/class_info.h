@@ -22,6 +22,8 @@ class ClassInfo
 {
 public:
 
+	ClassInfo& operator=(ClassInfo& other);
+
 	void add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function);
 
 	void add_static_function(std::string function_name, std::function<ObjectInstance(FunctionParameters)> function);
