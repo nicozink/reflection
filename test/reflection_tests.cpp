@@ -39,7 +39,7 @@ REGISTER_CLASS(TestClass)
 // Tests creating a new null value.
 TEST(Reflection, TestRegisterClass)
 {
-	std::shared_ptr<ClassInfo> class_info = Reflection<TestClass>::GetInstance().get_class_info();
+	std::shared_ptr<ClassInfo> class_info = Reflection::GetInstance().get_class_info("TestClass");
 	
 	ObjectInstance inst = class_info->create_null();
 

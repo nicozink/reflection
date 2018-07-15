@@ -18,30 +18,37 @@
 // System Includes
 #include <string>
 
-template <typename TType>
-class Reflection : public AutomaticSingleton<Reflection<TType>>
+class Reflection : public AutomaticSingleton<Reflection>
 {
 public:
 
-	std::shared_ptr<ClassInfo> get_class_info();
+	std::shared_ptr<ClassInfo> get_class_info(std::string name);
+
+	std::vector<std::string> get_class_names();
 
 	bool register_class(std::string name, ClassInfo class_info);
 
 private:
 
-	std::shared_ptr<ClassInfo> class_info;
+	std::map<std::string, std::shared_ptr<ClassInfo>> class_info;
+	std::vector<std::string> class_names;
 };
 
-template <typename TType>
-std::shared_ptr<ClassInfo> Reflection<TType>::get_class_info()
+std::shared_ptr<ClassInfo> Reflection::get_class_info(std::string name)
 {
-	return class_info;
+	return class_info[name];
 }
 
-template <typename TType>
-bool Reflection<TType>::register_class(std::string name, ClassInfo info)
+std::vector<std::string> Reflection::get_class_names()
 {
-	class_info = std::shared_ptr<ClassInfo>(new ClassInfo(info));
+	return class_names;
+}
+
+bool Reflection::register_class(std::string name, ClassInfo info)
+{
+	class_info[name] = std::shared_ptr<ClassInfo>(new ClassInfo(info));
+	class_names.push_back(name);
+
 	return true;
 }
 

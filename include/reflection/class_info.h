@@ -70,15 +70,19 @@ private:
 	// Stores getter or setters of class properties.
 	std::map<std::string, std::function<void(ObjectInstance, ObjectInstance)>> property_setters;
 	std::map<std::string, std::function<ObjectInstance(ObjectInstance)>> property_getters;
+	std::vector<std::string> property_names;
 
 	// Stores static values assigned to the class.
 	std::map<std::string, ObjectInstance> values;
+	std::vector<std::string> value_names;
 
 	// Stores member functions of the class.
 	std::map<std::string, std::function<ObjectInstance(ObjectInstance, FunctionParameters)>> member_functions;
+	std::vector<std::string> member_function_names;
 
 	// Stores static functions of the class.
 	std::map<std::string, std::function<ObjectInstance(FunctionParameters)>> static_functions;
+	std::vector<std::string> static_function_names;
 };
 
 #endif

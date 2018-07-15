@@ -24,7 +24,7 @@
 	private: \
 		static bool has_class_info; \
 	}; \
-	bool Bind##TName::has_class_info = Reflection<TType>::GetInstance().register_class(#TName, Bind##TName().get_class_info()); \
+	bool Bind##TName::has_class_info = Reflection::GetInstance().register_class(#TName, Bind##TName().get_class_info()); \
 	void Bind##TName::register_class_details()
 
 #define REGISTER_CLASS(TType) REGISTER_CLASS_AS(TType, TType)
