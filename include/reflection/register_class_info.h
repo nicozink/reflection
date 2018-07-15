@@ -63,6 +63,12 @@ public:
 	template <class TProp>
 	RegisterClassInfo&  register_property(const std::string name, TProp property);
 
+	// Registers a value which belongs to this class.
+	// @param name The property name.
+	// @param value The value.
+	template <class TType>
+	RegisterClassInfo& register_value(const std::string name, TType value);
+
 private:
 
 	ClassInfo class_info;
@@ -141,6 +147,21 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_static_method(const
 	};
 
 	class_info.add_static_function(name, call_function);
+
+	return *this;
+}
+
+// Registers a value which belongs to this class.
+// @param name The property name.
+// @param value The value.
+template <class TType>
+template <class TValueType>
+RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_value(const std::string name, TValueType value)
+{
+	ObjectInstance object_value;
+	object_value.set_value<TValueType>(value);
+
+	class_info.add_value(name, object_value);
 
 	return *this;
 }

@@ -31,6 +31,8 @@ public:
 	void add_set_property(std::string property_name, std::function<void(ObjectInstance, ObjectInstance)> property_function);
 	void add_get_property(std::string property_name, std::function<ObjectInstance(ObjectInstance)> property_function);
 
+	void add_value(std::string value_name, ObjectInstance value);
+	
 	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name);
 
 	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name, FunctionParameters params);
@@ -52,6 +54,8 @@ public:
 	ObjectInstance get_property(ObjectInstance instance, std::string property_name);
 	void set_property(ObjectInstance instance, std::string property_name, ObjectInstance value);
 
+	ObjectInstance get_value(std::string value_name);
+
 	void set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function);
 	void set_pointer_constructor(std::function<ObjectInstance(FunctionParameters)> function);
 	void set_null_constructor(std::function<ObjectInstance()> function);
@@ -66,6 +70,9 @@ private:
 	// Stores getter or setters of class properties.
 	std::map<std::string, std::function<void(ObjectInstance, ObjectInstance)>> property_setters;
 	std::map<std::string, std::function<ObjectInstance(ObjectInstance)>> property_getters;
+
+	// Stores static values assigned to the class.
+	std::map<std::string, ObjectInstance> values;
 
 	// Stores member functions of the class.
 	std::map<std::string, std::function<ObjectInstance(ObjectInstance, FunctionParameters)>> member_functions;

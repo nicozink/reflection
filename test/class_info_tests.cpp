@@ -293,3 +293,27 @@ TEST(ClassInfo, TestPropertySetterGetter)
 
 	ASSERT_EQ(return_value.get_value<int>(), 225);
 }
+
+enum class TestEnum
+{
+	Value1,
+	Value2
+};
+
+// Tests setting and getting values of an enum.
+TEST(ClassInfo, TestEnumValues)
+{
+	ClassInfo class_info = RegisterClassInfo<TestEnum>()
+		.register_value("Value1", TestEnum::Value1)
+		.register_value("Value2", TestEnum::Value2)
+		.register_class();
+
+	ObjectInstance test_value1 = class_info.get_value("Value1");
+	ObjectInstance test_value2 = class_info.get_value("Value2");
+	
+	TestEnum return_value1 = test_value1.get_value<TestEnum>();
+	TestEnum return_value2 = test_value2.get_value<TestEnum>();
+	
+	ASSERT_EQ(return_value1, TestEnum::Value1);
+	ASSERT_EQ(return_value2, TestEnum::Value2);
+}

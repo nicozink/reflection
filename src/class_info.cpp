@@ -39,6 +39,11 @@ void ClassInfo::add_get_property(std::string property_name, std::function<Object
 	property_getters.insert({ property_name, property_function });
 }
 
+void ClassInfo::add_value(std::string value_name, ObjectInstance value)
+{
+	values.insert({ value_name, value });
+}
+
 ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::string function_name)
 {
 	FunctionParameters params;
@@ -104,6 +109,11 @@ void ClassInfo::set_property(ObjectInstance instance, std::string property_name,
 	auto& property_function = property_setters[property_name];
 
 	property_function(instance, value);
+}
+
+ObjectInstance ClassInfo::get_value(std::string value_name)
+{
+	return values[value_name];
 }
 
 void ClassInfo::set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function)
