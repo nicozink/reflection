@@ -22,43 +22,55 @@ class ClassInfo
 {
 public:
 
-	ClassInfo& operator=(ClassInfo& other);
-
-	void add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function);
-
-	void add_static_function(std::string function_name, std::function<ObjectInstance(FunctionParameters)> function);
-
-	void add_set_property(std::string property_name, std::function<void(ObjectInstance, ObjectInstance)> property_function);
-	void add_get_property(std::string property_name, std::function<ObjectInstance(ObjectInstance)> property_function);
-
-	void add_value(std::string value_name, ObjectInstance value);
-	
-	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name);
-
-	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name, FunctionParameters params);
-
-	ObjectInstance call_static_function(std::string function_name);
-
-	ObjectInstance call_static_function(std::string function_name, FunctionParameters params);
-
-	ObjectInstance create_new();
-
-	ObjectInstance create_new(FunctionParameters params);
-
-	ObjectInstance create_new_ptr();
-
-	ObjectInstance create_new_ptr(FunctionParameters params);
-
-	ObjectInstance create_null();
-
-	ObjectInstance get_property(ObjectInstance instance, std::string property_name);
-	void set_property(ObjectInstance instance, std::string property_name, ObjectInstance value);
-
-	ObjectInstance get_value(std::string value_name);
+	// Constructors
 
 	void set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function);
 	void set_pointer_constructor(std::function<ObjectInstance(FunctionParameters)> function);
 	void set_null_constructor(std::function<ObjectInstance()> function);
+
+	ObjectInstance create_new();
+	ObjectInstance create_new(FunctionParameters params);
+	ObjectInstance create_new_ptr();
+	ObjectInstance create_new_ptr(FunctionParameters params);
+	ObjectInstance create_null();
+
+	bool get_has_constructor();
+
+	// Member functions
+
+	void add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function);
+	
+	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name);	
+	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name, FunctionParameters params);
+
+	std::vector<std::string>& get_member_function_names();
+
+	// Static Functions
+
+	void add_static_function(std::string function_name, std::function<ObjectInstance(FunctionParameters)> function);
+	
+	ObjectInstance call_static_function(std::string function_name);
+	ObjectInstance call_static_function(std::string function_name, FunctionParameters params);
+
+	std::vector<std::string>& get_static_function_names();
+
+	// Properties
+
+	void add_set_property(std::string property_name, std::function<void(ObjectInstance, ObjectInstance)> property_function);
+	void add_get_property(std::string property_name, std::function<ObjectInstance(ObjectInstance)> property_function);
+
+	ObjectInstance get_property(ObjectInstance instance, std::string property_name);
+	void set_property(ObjectInstance instance, std::string property_name, ObjectInstance value);
+
+	std::vector<std::string>& get_property_names();
+
+	// Values
+
+	void add_value(std::string value_name, ObjectInstance value);
+
+	ObjectInstance get_value(std::string value_name);
+
+	std::vector<std::string>& get_value_names();
 
 private:
 
@@ -66,6 +78,7 @@ private:
 	std::function<ObjectInstance(FunctionParameters)> value_constructor;
 	std::function<ObjectInstance(FunctionParameters)> pointer_constructor;
 	std::function<ObjectInstance()> null_constructor;
+	bool has_constructor;
 
 	// Stores getter or setters of class properties.
 	std::map<std::string, std::function<void(ObjectInstance, ObjectInstance)>> property_setters;
