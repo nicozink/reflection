@@ -7,6 +7,30 @@
 #include <reflection/class_info.h>
 
 //
+// Constructor
+//
+
+ClassInfo::ClassInfo(std::string type_name, TypeToId::type_id type_id)
+: type_name{ type_name }, type_id{ type_id }
+{
+
+}
+
+//
+// Type Info
+//
+
+std::string ClassInfo::get_type_name()
+{
+	return type_name;
+}
+
+TypeToId::type_id ClassInfo::get_type_id()
+{
+	return type_id;
+}
+
+//
 // Constructors
 //
 

@@ -28,7 +28,7 @@ class RegisterClassInfo
 {
 public:
 
-	RegisterClassInfo();
+	RegisterClassInfo(std::string name);
 
 	// Registers a base class for this object.
 	// @type TBase The base class type.
@@ -37,7 +37,7 @@ public:
 
 	// Registers a base class for this object.
 	// @returns The information describing the class.
-	ClassInfo register_class();
+	std::shared_ptr<ClassInfo> register_class();
 
 	// Registers the constructor for this class.
 	// @param name The function name.
@@ -71,17 +71,18 @@ public:
 
 private:
 
-	ClassInfo class_info;
+	std::shared_ptr<ClassInfo> class_info;
 };
 
 template <typename T>
-RegisterClassInfo<T>::RegisterClassInfo()
+RegisterClassInfo<T>::RegisterClassInfo(std::string name)
+	: class_info{ std::make_shared<ClassInfo>(name, TypeToId::get_id<T>()) }
 {
 
 }
 
 template <typename T>
-ClassInfo RegisterClassInfo<T>::register_class()
+std::shared_ptr<ClassInfo> RegisterClassInfo<T>::register_class()
 {
 	return class_info;
 }
@@ -90,9 +91,9 @@ template <typename TType>
 template <typename... Args>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_constructor()
 {
-	class_info.set_value_constructor(&ObjectConstructor<TType, Args...>::New);
-	class_info.set_pointer_constructor(&ObjectConstructor<TType, Args...>::NewPtr);
-	class_info.set_null_constructor(&ObjectConstructor<TType>::Null);
+	class_info->set_value_constructor(&ObjectConstructor<TType, Args...>::New);
+	class_info->set_pointer_constructor(&ObjectConstructor<TType, Args...>::NewPtr);
+	class_info->set_null_constructor(&ObjectConstructor<TType>::Null);
 
 	return *this;
 }
@@ -109,7 +110,7 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_method(const std::s
 		return to_return;
 	};
 
-	class_info.add_member_function(name, call_function);
+	class_info->add_member_function(name, call_function);
 
 	return *this;
 }
@@ -122,14 +123,14 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_property(const std:
 		CppProperty<TProp>::Set(inst, property, value);
 	};
 
-	class_info.add_set_property(name, property_setter);
+	class_info->add_set_property(name, property_setter);
 
 	auto property_getter = [property](ObjectInstance inst)->ObjectInstance {
 		ObjectInstance to_return = CppProperty<TProp>::Get(inst, property);
 		return to_return;
 	};
 
-	class_info.add_get_property(name, property_getter);
+	class_info->add_get_property(name, property_getter);
 
 	return *this;
 }
@@ -146,7 +147,7 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_static_method(const
 		return to_return;
 	};
 
-	class_info.add_static_function(name, call_function);
+	class_info->add_static_function(name, call_function);
 
 	return *this;
 }
@@ -161,7 +162,7 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_value(const std::st
 	ObjectInstance object_value;
 	object_value.set_value<TValueType>(value);
 
-	class_info.add_value(name, object_value);
+	class_info->add_value(name, object_value);
 
 	return *this;
 }

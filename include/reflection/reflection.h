@@ -9,14 +9,17 @@
 #ifndef reflection_reflection_h
 #define reflection_reflection_h
 
-// Local Includes
-#include "class_info.h"
-
 // Library Includes
 #include <cpp_util/types/automatic_singleton.h>
+#include <cpp_util/types/type_to_id.h>
 
 // System Includes
+#include <map>
+#include <memory>
 #include <string>
+#include <vector>
+
+class ClassInfo;
 
 class Reflection : public AutomaticSingleton<Reflection>
 {
@@ -24,32 +27,27 @@ public:
 
 	std::shared_ptr<ClassInfo> get_class_info(std::string name);
 
+	std::shared_ptr<ClassInfo> get_class_info(TypeToId::type_id type_id);
+
+	template <typename T>
+	std::shared_ptr<ClassInfo> get_class_info();
+
 	std::vector<std::string> get_class_names();
 
-	bool register_class(std::string name, ClassInfo class_info);
+	bool register_class(std::shared_ptr<ClassInfo> class_info);
 
 private:
 
-	std::map<std::string, std::shared_ptr<ClassInfo>> class_info;
+	std::map<std::string, std::shared_ptr<ClassInfo>> name_class_info;
+	std::map<TypeToId::type_id, std::shared_ptr<ClassInfo>> type_id_class_info;
 	std::vector<std::string> class_names;
 };
 
-std::shared_ptr<ClassInfo> Reflection::get_class_info(std::string name)
+template <typename T>
+std::shared_ptr<ClassInfo> Reflection::get_class_info()
 {
-	return class_info[name];
-}
-
-std::vector<std::string> Reflection::get_class_names()
-{
-	return class_names;
-}
-
-bool Reflection::register_class(std::string name, ClassInfo info)
-{
-	class_info[name] = std::shared_ptr<ClassInfo>(new ClassInfo(info));
-	class_names.push_back(name);
-
-	return true;
+	TypeToId::type_id type_id = TypeToId::get_id<T>();
+	return type_id_class_info[type_id];
 }
 
 #endif

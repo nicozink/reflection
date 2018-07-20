@@ -22,6 +22,13 @@ class ClassInfo
 {
 public:
 
+	ClassInfo(std::string type_name, TypeToId::type_id type_id);
+
+	// Type Info
+
+	std::string get_type_name();
+	TypeToId::type_id get_type_id();
+
 	// Constructors
 
 	void set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function);
@@ -73,6 +80,10 @@ public:
 	std::vector<std::string>& get_value_names();
 
 private:
+
+	// Type info
+	std::string type_name;
+	TypeToId::type_id type_id;
 
 	// Stores constructors used to create the object.
 	std::function<ObjectInstance(FunctionParameters)> value_constructor;

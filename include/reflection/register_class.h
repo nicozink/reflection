@@ -16,7 +16,8 @@
 #define REGISTER_CLASS_AS(TType, TName) \
 	class Bind##TName : RegisterClassInfo<TType> { \
 	public: \
-		ClassInfo get_class_info() { \
+		Bind##TName() : RegisterClassInfo<TType>(#TName) { } \
+		std::shared_ptr<ClassInfo> get_class_info() { \
 			register_class_details(); \
 			return register_class(); \
 		} \
@@ -24,7 +25,7 @@
 	private: \
 		static bool has_class_info; \
 	}; \
-	bool Bind##TName::has_class_info = Reflection::GetInstance().register_class(#TName, Bind##TName().get_class_info()); \
+	bool Bind##TName::has_class_info = Reflection::GetInstance().register_class(Bind##TName().get_class_info()); \
 	void Bind##TName::register_class_details()
 
 #define REGISTER_CLASS(TType) REGISTER_CLASS_AS(TType, TType)
