@@ -25,6 +25,8 @@ class ObjectInstance
 {
 public:
 
+	ObjectInstance();
+
 	template <typename T>
 	T& get_value() const;
 

@@ -7,6 +7,12 @@
 #include <reflection/class_info.h>
 
 //
+// Static Variables
+//
+
+std::shared_ptr<ClassInfo> ClassInfo::Undefined = std::make_shared<ClassInfo>("Undefined", -1);
+
+//
 // Constructor
 //
 

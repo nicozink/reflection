@@ -9,6 +9,12 @@
 // Local Includes
 #include <reflection/class_info.h>
 
+ObjectInstance::ObjectInstance()
+	: class_info{ nullptr }
+{
+
+}
+
 std::string ObjectInstance::get_type_name()
 {
 	if (class_info != nullptr)

@@ -22,6 +22,9 @@ class ClassInfo
 {
 public:
 
+	// Static Variables
+	static std::shared_ptr<ClassInfo> Undefined;
+
 	ClassInfo(std::string type_name, TypeToId::type_id type_id);
 
 	// Type Info

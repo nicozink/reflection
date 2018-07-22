@@ -47,7 +47,8 @@ template <typename T>
 std::shared_ptr<ClassInfo> Reflection::get_class_info()
 {
 	TypeToId::type_id type_id = TypeToId::get_id<T>();
-	return type_id_class_info[type_id];
+
+	return get_class_info(type_id);
 }
 
 #endif

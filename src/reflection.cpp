@@ -11,12 +11,22 @@
 
 std::shared_ptr<ClassInfo> Reflection::get_class_info(std::string name)
 {
-	return name_class_info[name];
+	if (name_class_info.find(name) != name_class_info.end())
+	{
+		return name_class_info[name];
+	}
+
+	return ClassInfo::Undefined;
 }
 
 std::shared_ptr<ClassInfo> Reflection::get_class_info(TypeToId::type_id type_id)
 {
-	return type_id_class_info[type_id];
+	if (type_id_class_info.find(type_id) != type_id_class_info.end())
+	{
+		return type_id_class_info[type_id];
+	}
+
+	return ClassInfo::Undefined;
 }
 
 std::vector<std::string> Reflection::get_class_names()
