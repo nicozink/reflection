@@ -48,7 +48,7 @@ private:
 template <typename T>
 T& ObjectInstance::get_value() const
 {
-	return value.get<T>();
+	return value.get<T&>();
 }
 
 template <typename T>
