@@ -285,7 +285,7 @@ TEST(ClassInfo, TestPropertySetterGetter)
 	ObjectInstance inst = class_info->create_new();
 
 	ObjectInstance input_value;
-	input_value.set_value(225);
+	input_value.set_value<int>(225);
 
 	class_info->set_property(inst, "test_variable", input_value);
 

@@ -34,7 +34,7 @@ public:
 		auto call_function = [&to_return](Args... args)
 		{
 			TType value(args...);
-			to_return.set_value<TType>(value);
+			to_return.set_value<TType>(std::move(value));
 		};
 
 		// we reconstruct the parameters and call the function.
