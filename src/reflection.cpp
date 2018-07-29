@@ -34,7 +34,7 @@ std::vector<std::string> Reflection::get_class_names()
 	return class_names;
 }
 
-bool Reflection::register_class(std::shared_ptr<ClassInfo> info)
+ClassInfo* Reflection::register_class(std::shared_ptr<ClassInfo> info)
 {
 	std::string type_name = info->get_type_name();
 	TypeToId::type_id type_id = info->get_type_id();
@@ -43,5 +43,5 @@ bool Reflection::register_class(std::shared_ptr<ClassInfo> info)
 	type_id_class_info[type_id] = info;
 	class_names.push_back(type_name);
 
-	return true;
+	return info.get();
 }

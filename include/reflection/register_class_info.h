@@ -37,7 +37,7 @@ public:
 
 	// Registers a base class for this object.
 	// @returns The information describing the class.
-	std::shared_ptr<ClassInfo> register_class();
+	virtual std::shared_ptr<ClassInfo> register_class();
 
 	// Registers the constructor for this class.
 	// @param name The function name.

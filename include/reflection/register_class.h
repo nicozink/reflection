@@ -14,20 +14,28 @@
 #include "register_class_info.h"
 
 #define REGISTER_CLASS_AS(TType, TName) \
-	class Bind##TName : RegisterClassInfo<TType> { \
-	public: \
-		Bind##TName() : RegisterClassInfo<TType>(#TName) { } \
-		std::shared_ptr<ClassInfo> get_class_info() { \
-			register_class_details(); \
-			return register_class(); \
-		} \
-		void register_class_details(); \
-	private: \
-		static bool has_class_info; \
-	}; \
-	bool Bind##TName::has_class_info = Reflection::GetInstance().register_class(Bind##TName().get_class_info()); \
+	namespace \
+	{ \
+		class Bind##TName : public RegisterClassInfo<TType> { \
+		public: \
+			Bind##TName() : RegisterClassInfo<TType>(#TName) { } \
+			std::shared_ptr<ClassInfo> register_class() override { \
+				register_class_details(); \
+				return RegisterClassInfo<TType>::register_class(); \
+			} \
+			void register_class_details(); \
+		}; \
+	} \
+	void ReflectionRegister##TName() \
+	{ \
+		Reflection::GetInstance().register_class(Bind##TName().register_class()); \
+	} \
 	void Bind##TName::register_class_details()
 
 #define REGISTER_CLASS(TType) REGISTER_CLASS_AS(TType, TType)
+
+#define MANUAL_REGISTER_CLASS_AS(TType, TName) REGISTER_CLASS_AS(TType, TName)
+
+#define MANUAL_REGISTER_CLASS(TType) MANUAL_REGISTER_CLASS_AS(TType, TType)
 
 #endif

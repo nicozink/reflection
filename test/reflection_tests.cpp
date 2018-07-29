@@ -26,7 +26,7 @@ public:
 	}
 };
 
-REGISTER_CLASS(TestClass)
+MANUAL_REGISTER_CLASS(TestClass)
 {
 	register_constructor();
 	register_method("get_test_value", &TestClass::get_test_value);
@@ -39,6 +39,8 @@ REGISTER_CLASS(TestClass)
 // Tests creating a new null value.
 TEST(Reflection, TestRegisterClass)
 {
+	ReflectionRegisterTestClass();
+
 	std::shared_ptr<ClassInfo> class_info = Reflection::GetInstance().get_class_info("TestClass");
 	
 	ObjectInstance inst = class_info->create_null();

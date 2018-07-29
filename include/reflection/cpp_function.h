@@ -76,7 +76,7 @@ public:
 		// of parameters.
 		auto call_function = [&to_return, inst, function](Args... args)
 		{
-			T object_instance = inst.get_value<T>();
+			T& object_instance = inst.get_value<T>();
 			to_return.set_value<TReturn>((object_instance.*function)(args...));
 		};
 

@@ -34,7 +34,7 @@ public:
 
 	std::vector<std::string> get_class_names();
 
-	bool register_class(std::shared_ptr<ClassInfo> class_info);
+	ClassInfo* register_class(std::shared_ptr<ClassInfo> class_info);
 
 private:
 
