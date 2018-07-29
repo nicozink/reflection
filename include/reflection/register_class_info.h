@@ -91,9 +91,10 @@ template <typename TType>
 template <typename... Args>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_constructor()
 {
-	class_info->set_value_constructor(&ObjectConstructor<TType, Args...>::New);
-	class_info->set_pointer_constructor(&ObjectConstructor<TType, Args...>::NewPtr);
-	class_info->set_null_constructor(&ObjectConstructor<TType>::Null);
+	class_info->set_constructors(
+		&ObjectConstructor<TType, Args...>::New,
+		&ObjectConstructor<TType, Args...>::NewPtr,
+		&ObjectConstructor<TType>::Null);
 
 	return *this;
 }

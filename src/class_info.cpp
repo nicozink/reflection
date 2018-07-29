@@ -40,19 +40,16 @@ TypeToId::type_id ClassInfo::get_type_id()
 // Constructors
 //
 
-void ClassInfo::set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function)
+void ClassInfo::set_constructors(
+	std::function<ObjectInstance(FunctionParameters)> value_function,
+	std::function<ObjectInstance(FunctionParameters)> pointer_function,
+	std::function<ObjectInstance()> null_function)
 {
-	value_constructor = function;
-}
+	value_constructor = value_function;
+	pointer_constructor = pointer_function;
+	null_constructor = null_function;
 
-void ClassInfo::set_pointer_constructor(std::function<ObjectInstance(FunctionParameters)> function)
-{
-	pointer_constructor = function;
-}
-
-void ClassInfo::set_null_constructor(std::function<ObjectInstance()> function)
-{
-	null_constructor = function;
+	has_constructor = true;
 }
 
 ObjectInstance ClassInfo::create_new()

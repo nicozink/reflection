@@ -34,9 +34,10 @@ public:
 
 	// Constructors
 
-	void set_value_constructor(std::function<ObjectInstance(FunctionParameters)> function);
-	void set_pointer_constructor(std::function<ObjectInstance(FunctionParameters)> function);
-	void set_null_constructor(std::function<ObjectInstance()> function);
+	void set_constructors(
+		std::function<ObjectInstance(FunctionParameters)> value_function,
+		std::function<ObjectInstance(FunctionParameters)> pointer_function,
+		std::function<ObjectInstance()> null_function);
 
 	ObjectInstance create_new();
 	ObjectInstance create_new(FunctionParameters params);
