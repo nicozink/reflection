@@ -6,8 +6,8 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_function_parameters_h
-#define cpp_util_reflection_function_parameters_h
+#ifndef reflection_function_parameters_h
+#define reflection_function_parameters_h
 
 // Local Includes
 #include "object_instance.h"
@@ -39,6 +39,8 @@ public:
 
 	template <typename T>
 	void add(T value);
+
+	size_t size();
 
 private:
 

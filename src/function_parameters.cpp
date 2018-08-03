@@ -20,3 +20,8 @@ void FunctionParameters::add(ObjectInstance value)
 {
 	values.push_back(value);
 }
+
+size_t FunctionParameters::size()
+{
+	return values.size();
+}

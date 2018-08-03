@@ -19,9 +19,6 @@ class CppStaticFunction
 {
 public:
 
-	// Creates the function info for the provided method.
-	static StaticFunctionInfo Create(std::string name, TFunc function);
-
 	// Calls the method using the provided Lua state.
 	static ObjectInstance Call(TFunc function, FunctionParameters params);
 };
@@ -35,23 +32,6 @@ class CppStaticFunction<void (*)(Args...)>
 	typedef void (*TFunc)(Args...);
 
 public:
-
-	// Creates the function info for the provided method.
-	static StaticFunctionInfo Create(std::string name, TFunc function)
-	{
-		auto call_function = [function](FunctionParameters params)->ObjectInstance {
-			ObjectInstance to_return = Call(function, params);
-			return to_return;
-		};
-
-		StaticFunctionInfo function_info;
-		function_info.set_function_name(name);
-		function_info.set_has_return(false);
-		function_info.set_parameter_count(sizeof...(Args));
-		function_info.set_function(call_function);
-
-		return function_info;
-	}
 
 	// Calls the method using the provided Lua state.
 	static ObjectInstance Call(TFunc function, FunctionParameters params)
@@ -82,23 +62,6 @@ class CppStaticFunction<TReturn(*)(Args...)>
 	typedef TReturn(*TFunc)(Args...);
 
 public:
-
-	// Creates the function info for the provided method.
-	static StaticFunctionInfo Create(std::string name, TFunc function)
-	{
-		auto call_function = [function](FunctionParameters params)->ObjectInstance {
-			ObjectInstance to_return = Call(function, params);
-			return to_return;
-		};
-
-		StaticFunctionInfo function_info;
-		function_info.set_function_name(name);
-		function_info.set_has_return(true);
-		function_info.set_parameter_count(sizeof...(Args));
-		function_info.set_function(call_function);
-
-		return function_info;
-	}
 
 	// Calls the method using the provided Lua state.
 	static ObjectInstance Call(TFunc function, FunctionParameters params)

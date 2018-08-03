@@ -6,12 +6,15 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_class_info_h
-#define cpp_util_reflection_class_info_h
+#ifndef reflection_class_info_h
+#define reflection_class_info_h
 
 // Local Includes
+#include "function_info.h"
 #include "function_parameters.h"
 #include "object_instance.h"
+#include "property_info.h"
+#include "static_function_info.h"
 
 // System Includes
 #include <functional>
@@ -35,9 +38,9 @@ public:
 	// Constructors
 
 	void set_constructors(
-		std::function<ObjectInstance(FunctionParameters)> value_function,
-		std::function<ObjectInstance(FunctionParameters)> pointer_function,
-		std::function<ObjectInstance()> null_function);
+		StaticFunctionInfo value_function,
+		StaticFunctionInfo pointer_function,
+		StaticFunctionInfo null_function);
 
 	ObjectInstance create_new();
 	ObjectInstance create_new(FunctionParameters params);
@@ -49,7 +52,7 @@ public:
 
 	// Member functions
 
-	void add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function);
+	void add_member_function(std::string function_name, FunctionInfo function);
 	
 	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name);	
 	ObjectInstance call_member_function(ObjectInstance instance, std::string function_name, FunctionParameters params);
@@ -58,7 +61,7 @@ public:
 
 	// Static Functions
 
-	void add_static_function(std::string function_name, std::function<ObjectInstance(FunctionParameters)> function);
+	void add_static_function(std::string function_name, StaticFunctionInfo function);
 	
 	ObjectInstance call_static_function(std::string function_name);
 	ObjectInstance call_static_function(std::string function_name, FunctionParameters params);
@@ -67,9 +70,8 @@ public:
 
 	// Properties
 
-	void add_set_property(std::string property_name, std::function<void(ObjectInstance, ObjectInstance)> property_function);
-	void add_get_property(std::string property_name, std::function<ObjectInstance(ObjectInstance)> property_function);
-
+	void add_property(std::string property_name, PropertyInfo property_function);
+	
 	ObjectInstance get_property(ObjectInstance instance, std::string property_name);
 	void set_property(ObjectInstance instance, std::string property_name, ObjectInstance value);
 
@@ -90,14 +92,13 @@ private:
 	TypeToId::type_id type_id;
 
 	// Stores constructors used to create the object.
-	std::function<ObjectInstance(FunctionParameters)> value_constructor;
-	std::function<ObjectInstance(FunctionParameters)> pointer_constructor;
-	std::function<ObjectInstance()> null_constructor;
+	StaticFunctionInfo value_constructor;
+	StaticFunctionInfo pointer_constructor;
+	StaticFunctionInfo null_constructor;
 	bool has_constructor;
 
 	// Stores getter or setters of class properties.
-	std::map<std::string, std::function<void(ObjectInstance, ObjectInstance)>> property_setters;
-	std::map<std::string, std::function<ObjectInstance(ObjectInstance)>> property_getters;
+	std::map<std::string, PropertyInfo> properties;
 	std::vector<std::string> property_names;
 
 	// Stores static values assigned to the class.
@@ -105,11 +106,11 @@ private:
 	std::vector<std::string> value_names;
 
 	// Stores member functions of the class.
-	std::map<std::string, std::function<ObjectInstance(ObjectInstance, FunctionParameters)>> member_functions;
+	std::map<std::string, FunctionInfo> member_functions;
 	std::vector<std::string> member_function_names;
 
 	// Stores static functions of the class.
-	std::map<std::string, std::function<ObjectInstance(FunctionParameters)>> static_functions;
+	std::map<std::string, StaticFunctionInfo> static_functions;
 	std::vector<std::string> static_function_names;
 };
 

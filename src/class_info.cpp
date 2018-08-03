@@ -41,9 +41,9 @@ TypeToId::type_id ClassInfo::get_type_id()
 //
 
 void ClassInfo::set_constructors(
-	std::function<ObjectInstance(FunctionParameters)> value_function,
-	std::function<ObjectInstance(FunctionParameters)> pointer_function,
-	std::function<ObjectInstance()> null_function)
+	StaticFunctionInfo value_function,
+	StaticFunctionInfo pointer_function,
+	StaticFunctionInfo null_function)
 {
 	value_constructor = value_function;
 	pointer_constructor = pointer_function;
@@ -59,7 +59,7 @@ ObjectInstance ClassInfo::create_new()
 
 ObjectInstance ClassInfo::create_new(FunctionParameters params)
 {
-	return value_constructor(params);
+	return value_constructor.call(params);
 }
 
 ObjectInstance ClassInfo::create_new_ptr()
@@ -69,12 +69,12 @@ ObjectInstance ClassInfo::create_new_ptr()
 
 ObjectInstance ClassInfo::create_new_ptr(FunctionParameters params)
 {
-	return pointer_constructor(params);
+	return pointer_constructor.call(params);
 }
 
 ObjectInstance ClassInfo::create_null()
 {
-	return null_constructor();
+	return null_constructor.call(FunctionParameters());
 }
 
 bool ClassInfo::get_has_constructor()
@@ -86,7 +86,7 @@ bool ClassInfo::get_has_constructor()
 // Member functions
 //
 
-void ClassInfo::add_member_function(std::string function_name, std::function<ObjectInstance(ObjectInstance, FunctionParameters)> function)
+void ClassInfo::add_member_function(std::string function_name, FunctionInfo function)
 {
 	member_functions.insert({ function_name, function });
 }
@@ -102,7 +102,7 @@ ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::str
 {
 	auto& function = member_functions[function_name];
 
-	return function(instance, params);
+	return function.call(instance, params);
 }
 
 std::vector<std::string>& ClassInfo::get_member_function_names()
@@ -114,7 +114,7 @@ std::vector<std::string>& ClassInfo::get_member_function_names()
 // Static Functions
 //
 
-void ClassInfo::add_static_function(std::string function_name, std::function<ObjectInstance(FunctionParameters)> function)
+void ClassInfo::add_static_function(std::string function_name, StaticFunctionInfo function)
 {
 	static_functions.insert({ function_name, function });
 }
@@ -130,7 +130,7 @@ ObjectInstance ClassInfo::call_static_function(std::string function_name, Functi
 {
 	auto& function = static_functions[function_name];
 
-	return function(params);
+	return function.call(params);
 }
 
 std::vector<std::string>& ClassInfo::get_static_function_names()
@@ -142,28 +142,23 @@ std::vector<std::string>& ClassInfo::get_static_function_names()
 // Properties
 //
 
-void ClassInfo::add_set_property(std::string property_name, std::function<void(ObjectInstance, ObjectInstance)> property_function)
+void ClassInfo::add_property(std::string property_name, PropertyInfo property_info)
 {
-	property_setters.insert({ property_name, property_function });
-}
-
-void ClassInfo::add_get_property(std::string property_name, std::function<ObjectInstance(ObjectInstance)> property_function)
-{
-	property_getters.insert({ property_name, property_function });
+	properties.insert({ property_name, property_info });
 }
 
 ObjectInstance ClassInfo::get_property(ObjectInstance instance, std::string property_name)
 {
-	auto& property_function = property_getters[property_name];
+	auto& property_function = properties[property_name];
 
-	return property_function(instance);
+	return property_function.get(instance);
 }
 
 void ClassInfo::set_property(ObjectInstance instance, std::string property_name, ObjectInstance value)
 {
-	auto& property_function = property_setters[property_name];
+	auto& property_function = properties[property_name];
 
-	property_function(instance, value);
+	property_function.set(instance, value);
 }
 
 std::vector<std::string>& ClassInfo::get_property_names()

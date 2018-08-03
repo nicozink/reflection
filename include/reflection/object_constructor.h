@@ -6,8 +6,8 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_object_constructor_h
-#define cpp_util_reflection_object_constructor_h
+#ifndef reflection_object_constructor_h
+#define reflection_object_constructor_h
 
 // Local Includes
 #include "cpp_parameters.h"
@@ -66,7 +66,7 @@ public:
 
 	// Pushes a null value onto the stack of the Lua state.
 	// @param luaState The Lua state object.
-	static ObjectInstance Null()
+	static ObjectInstance Null(FunctionParameters)
 	{
 		ObjectInstance to_return;
 		to_return.set_value<TType*>(nullptr);

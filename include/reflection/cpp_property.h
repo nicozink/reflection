@@ -4,15 +4,16 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_cpp_property_h
-#define cpp_util_reflection_cpp_property_h
+#ifndef reflection_cpp_property_h
+#define reflection_cpp_property_h
 
 // A class which is used to access a C++ class member variable.
 template<class TProp>
 class CppProperty
 {
 public:
-  
+	static PropertyInfo Create(std::string name, TProp prop);
+
 	// Gets the property from the variable instance.
 	static ObjectInstance Get(ObjectInstance& inst, TProp prop);
 
@@ -29,7 +30,25 @@ class CppProperty<TType T::*>
 	typedef TType T::*TProp;
   
 public:
-  
+	static PropertyInfo Create(std::string name, TProp prop)
+	{
+		auto property_setter = [prop](ObjectInstance inst, ObjectInstance value) {
+			CppProperty<TProp>::Set(inst, prop, value);
+		};
+
+		auto property_getter = [prop](ObjectInstance inst)->ObjectInstance {
+			ObjectInstance to_return = CppProperty<TProp>::Get(inst, prop);
+			return to_return;
+		};
+
+		PropertyInfo property_info;
+		property_info.set_parameter_name(name);
+		property_info.set_function_set(property_setter);
+		property_info.set_function_get(property_getter);
+
+		return property_info;
+	}
+
 	// Gets the property and places it onto the stack.
 	static ObjectInstance Get(ObjectInstance& inst, TProp prop)
 	{

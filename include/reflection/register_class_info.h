@@ -6,8 +6,8 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_register_class_info_h
-#define cpp_util_reflection_register_class_info_h
+#ifndef reflection_register_class_info_h
+#define reflection_register_class_info_h
 
 // Local Includes
 #include "class_info.h"
@@ -91,10 +91,25 @@ template <typename TType>
 template <typename... Args>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_constructor()
 {
-	class_info->set_constructors(
-		&ObjectConstructor<TType, Args...>::New,
-		&ObjectConstructor<TType, Args...>::NewPtr,
-		&ObjectConstructor<TType>::Null);
+	StaticFunctionInfo create_new;
+	create_new.set_function_name("Create");
+	create_new.set_has_return(true);
+	create_new.set_parameter_count(sizeof...(Args));
+	create_new.set_function(&ObjectConstructor<TType, Args...>::New);
+
+	StaticFunctionInfo create_ptr;
+	create_ptr.set_function_name("CreatePtr");
+	create_ptr.set_has_return(true);
+	create_ptr.set_parameter_count(sizeof...(Args));
+	create_ptr.set_function(&ObjectConstructor<TType, Args...>::NewPtr);
+
+	StaticFunctionInfo create_null;
+	create_null.set_function_name("CreateNull");
+	create_null.set_has_return(true);
+	create_null.set_parameter_count(0);
+	create_null.set_function(&ObjectConstructor<TType>::Null);
+
+	class_info->set_constructors(create_new, create_ptr, create_null);
 
 	return *this;
 }
@@ -106,12 +121,7 @@ template <typename TType>
 template <class TFunc>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_method(const std::string name, TFunc function)
 {
-	auto call_function = [function](ObjectInstance& inst, FunctionParameters params)->ObjectInstance {
-		ObjectInstance to_return = CppFunction<TFunc>::Call(inst, function, params);
-		return to_return;
-	};
-
-	class_info->add_member_function(name, call_function);
+	class_info->add_member_function(name, CppFunction<TType, TFunc>::Create(name, function));
 
 	return *this;
 }
@@ -120,18 +130,7 @@ template <typename TType>
 template <class TProp>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_property(const std::string name, TProp property)
 {
-	auto property_setter = [property](ObjectInstance inst, ObjectInstance value) {
-		CppProperty<TProp>::Set(inst, property, value);
-	};
-
-	class_info->add_set_property(name, property_setter);
-
-	auto property_getter = [property](ObjectInstance inst)->ObjectInstance {
-		ObjectInstance to_return = CppProperty<TProp>::Get(inst, property);
-		return to_return;
-	};
-
-	class_info->add_get_property(name, property_getter);
+	class_info->add_property(name, CppProperty<TProp>::Create(name, property));
 
 	return *this;
 }
@@ -143,12 +142,7 @@ template <typename TType>
 template <class TFunc>
 RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_static_method(const std::string name, TFunc function)
 {
-	auto call_function = [function](FunctionParameters params)->ObjectInstance {
-		ObjectInstance to_return = CppStaticFunction<TFunc>::Call(function, params);
-		return to_return;
-	};
-
-	class_info->add_static_function(name, call_function);
+	class_info->add_static_function(name, CppStaticFunction<TFunc>::Create(name, function));
 
 	return *this;
 }

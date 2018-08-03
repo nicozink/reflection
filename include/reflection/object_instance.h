@@ -6,8 +6,8 @@
 
 #pragma once
 
-#ifndef cpp_util_reflection_object_instance_h
-#define cpp_util_reflection_object_instance_h
+#ifndef reflection_object_instance_h
+#define reflection_object_instance_h
 
 // Library Includes
 #include <cpp_util/types/variant_type.h>
