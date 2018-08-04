@@ -50,6 +50,10 @@ public:
 
 	bool get_has_constructor();
 
+	StaticFunctionInfo get_create_new();
+	StaticFunctionInfo get_create_new_ptr();
+	StaticFunctionInfo get_create_null();
+
 	// Member functions
 
 	void add_member_function(std::string function_name, FunctionInfo function);

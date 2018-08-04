@@ -82,6 +82,21 @@ bool ClassInfo::get_has_constructor()
 	return has_constructor;
 }
 
+StaticFunctionInfo ClassInfo::get_create_new()
+{
+	return value_constructor;
+}
+
+StaticFunctionInfo ClassInfo::get_create_new_ptr()
+{
+	return pointer_constructor;
+}
+
+StaticFunctionInfo ClassInfo::get_create_null()
+{
+	return null_constructor;
+}
+
 //
 // Member functions
 //
@@ -89,6 +104,7 @@ bool ClassInfo::get_has_constructor()
 void ClassInfo::add_member_function(std::string function_name, FunctionInfo function)
 {
 	member_functions.insert({ function_name, function });
+	member_function_names.push_back(function_name);
 }
 
 ObjectInstance ClassInfo::call_member_function(ObjectInstance instance, std::string function_name)
@@ -117,6 +133,7 @@ std::vector<std::string>& ClassInfo::get_member_function_names()
 void ClassInfo::add_static_function(std::string function_name, StaticFunctionInfo function)
 {
 	static_functions.insert({ function_name, function });
+	static_function_names.push_back(function_name);
 }
 
 ObjectInstance ClassInfo::call_static_function(std::string function_name)
@@ -145,6 +162,7 @@ std::vector<std::string>& ClassInfo::get_static_function_names()
 void ClassInfo::add_property(std::string property_name, PropertyInfo property_info)
 {
 	properties.insert({ property_name, property_info });
+	property_names.push_back(property_name);
 }
 
 ObjectInstance ClassInfo::get_property(ObjectInstance instance, std::string property_name)
@@ -173,6 +191,7 @@ std::vector<std::string>& ClassInfo::get_property_names()
 void ClassInfo::add_value(std::string value_name, ObjectInstance value)
 {
 	values.insert({ value_name, value });
+	value_names.push_back(value_name);
 }
 
 ObjectInstance ClassInfo::get_value(std::string value_name)
