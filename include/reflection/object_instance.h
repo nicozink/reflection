@@ -25,6 +25,15 @@ class ObjectInstance
 {
 public:
 
+	enum class ObjectType
+	{
+		Empty,
+		Float,
+		Integer,
+		Object,
+		String
+	};
+
 	ObjectInstance();
 
 	template <typename T>
@@ -48,11 +57,15 @@ public:
 	template <typename T>
 	void set_value(std::shared_ptr<ClassInfo> class_info, T&& value);
 
+	ObjectType get_type();
+
 	std::string get_type_name();
 
 private:
 
 	std::shared_ptr<ClassInfo> class_info;
+
+	ObjectType type;
 
 	VariantType value;
 };
@@ -70,7 +83,18 @@ void ObjectInstance::set_value(T* value)
 	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<T>();
 
 	set_value<T>(class_info, value);
+
+	type = ObjectType::Object;
 }
+
+template <>
+void ObjectInstance::set_value<float>(float& value);
+
+template <>
+void ObjectInstance::set_value<int>(int& value);
+
+template <>
+void ObjectInstance::set_value<std::string>(std::string& value);
 
 template <typename T>
 void ObjectInstance::set_value(T& value)
@@ -79,7 +103,18 @@ void ObjectInstance::set_value(T& value)
 	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<T>();
 
 	set_value<T>(class_info, value);
+
+	type = ObjectType::Object;
 }
+
+template <>
+void ObjectInstance::set_value<float>(float&& value);
+
+template <>
+void ObjectInstance::set_value<int>(int&& value);
+
+template <>
+void ObjectInstance::set_value<std::string>(std::string&& value);
 
 template <typename T>
 void ObjectInstance::set_value(T&& value)
@@ -88,6 +123,8 @@ void ObjectInstance::set_value(T&& value)
 	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<T>();
 
 	set_value<T>(class_info, std::move(value));
+
+	type = ObjectType::Object;
 }
 
 template <typename T>

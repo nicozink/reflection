@@ -63,6 +63,8 @@ public:
 
 	std::vector<std::string>& get_member_function_names();
 
+	FunctionInfo get_member_function(std::string function_name);
+
 	// Static Functions
 
 	void add_static_function(std::string function_name, StaticFunctionInfo function);
@@ -71,6 +73,8 @@ public:
 	ObjectInstance call_static_function(std::string function_name, FunctionParameters params);
 
 	std::vector<std::string>& get_static_function_names();
+
+	StaticFunctionInfo get_static_function(std::string function_name);
 
 	// Properties
 

@@ -126,6 +126,11 @@ std::vector<std::string>& ClassInfo::get_member_function_names()
 	return member_function_names;
 }
 
+FunctionInfo ClassInfo::get_member_function(std::string function_name)
+{
+	return member_functions[function_name];
+}
+
 //
 // Static Functions
 //
@@ -153,6 +158,11 @@ ObjectInstance ClassInfo::call_static_function(std::string function_name, Functi
 std::vector<std::string>& ClassInfo::get_static_function_names()
 {
 	return static_function_names;
+}
+
+StaticFunctionInfo ClassInfo::get_static_function(std::string function_name)
+{
+	return static_functions[function_name];
 }
 
 //
