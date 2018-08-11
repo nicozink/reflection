@@ -11,7 +11,7 @@
 
 // Library Includes
 #include <cpp_util/types/automatic_singleton.h>
-#include <cpp_util/types/type_to_id.h>
+#include <cpp_util/types/raw_type_to_id.h>
 
 // System Includes
 #include <map>
@@ -46,7 +46,7 @@ private:
 template <typename T>
 std::shared_ptr<ClassInfo> Reflection::get_class_info()
 {
-	TypeToId::type_id type_id = TypeToId::get_id<T>();
+	TypeToId::type_id type_id = RawTypeToId<T>::get_id();
 
 	return get_class_info(type_id);
 }
