@@ -26,7 +26,7 @@
 			void register_class_details(); \
 		}; \
 	} \
-	void ReflectionRegister##TName() \
+	void RegisterReflection##TName() \
 	{ \
 		Reflection::GetInstance().register_class(Bind##TName().register_class()); \
 	} \

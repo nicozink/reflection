@@ -26,6 +26,7 @@ set(SRC_INTERFACE
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/object_instance.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/property_info.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/reflection.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/register.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/register_class_info.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/register_class.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/static_function_info.h)

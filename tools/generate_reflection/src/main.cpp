@@ -45,16 +45,16 @@ int main(int argc, char **argv)
 
 	for (auto& registered_class : registered_classes)
 	{
-		file_out << "extern void ReflectionRegister" << registered_class << "();" << std::endl;
+		file_out << "extern void RegisterReflection" << registered_class << "();" << std::endl;
 	}
 
 	file_out << std::endl;
-	file_out << "void ReflectionRegister()" << std::endl;
+	file_out << "void RegisterReflection()" << std::endl;
 	file_out << "{" << std::endl;
 
 	for (auto& registered_class : registered_classes)
 	{
-		file_out << "\tReflectionRegister" << registered_class << "();" << std::endl;
+		file_out << "\tRegisterReflection" << registered_class << "();" << std::endl;
 	}
 
 	file_out << "}" << std::endl;
