@@ -37,19 +37,13 @@ public:
 	ObjectInstance();
 
 	template <typename T>
-	T& get_value() const;
-
-	/*template <typename T>
-	void set_value(T* value);*/
+	T get_value() const;
 
 	template <typename T>
 	void set_value(T& value);
 
 	template <typename T>
 	void set_value(T&& value);
-
-	/*template <typename T>
-	void set_value(std::shared_ptr<ClassInfo> class_info, T* value);*/
 
 	template <typename T>
 	void set_value(std::shared_ptr<ClassInfo> class_info, T& value);
@@ -70,22 +64,17 @@ private:
 	VariantType value;
 };
 
+template <>
+float ObjectInstance::get_value<float>() const;
+
+template <>
+int ObjectInstance::get_value<int>() const;
+
 template <typename T>
-T& ObjectInstance::get_value() const
+T ObjectInstance::get_value() const
 {
-	return value.get<T&>();
+	return value.get<T>();
 }
-
-/*template <typename T>
-void ObjectInstance::set_value(T* value)
-{
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<T>();
-
-	set_value<T>(class_info, value);
-
-	type = ObjectType::Object;
-}*/
 
 template <>
 void ObjectInstance::set_value<float>(float& value);
@@ -128,13 +117,6 @@ void ObjectInstance::set_value(T&& value)
 
 	type = ObjectType::Object;
 }
-
-/*template <typename T>
-void ObjectInstance::set_value(std::shared_ptr<ClassInfo> class_info, T* value)
-{
-	this->class_info = class_info;
-	this->value.set<T*>(value);
-}*/
 
 template <typename T>
 void ObjectInstance::set_value(std::shared_ptr<ClassInfo> class_info, T& value)

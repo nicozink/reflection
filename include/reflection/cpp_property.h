@@ -63,8 +63,8 @@ public:
 	// Gets the property from the stack and copies it to the object.
 	static void Set(ObjectInstance& inst, TProp prop, ObjectInstance& value)
 	{
-		T& object_instance = inst.get_value<T>();
-		TType& property_value = value.get_value<TType>();
+		T& object_instance = inst.get_value<T&>();
+		TType& property_value = value.get_value<TType&>();
 		
 		(object_instance.*prop) = property_value;
 	}

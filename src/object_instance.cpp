@@ -18,6 +18,32 @@ ObjectInstance::ObjectInstance() :
 }
 
 template <>
+float ObjectInstance::get_value<float>() const
+{
+	if (type == ObjectType::Integer)
+	{
+		return (float)value.get<int>();
+	}
+	else
+	{
+		return value.get<float>();
+	}
+}
+
+template <>
+int ObjectInstance::get_value<int>() const
+{
+	if (type == ObjectType::Float)
+	{
+		return (int)value.get<float>();
+	}
+	else
+	{
+		return value.get<int>();
+	}
+}
+
+template <>
 void ObjectInstance::set_value<float>(float& value)
 {
 	auto& reflection = Reflection::GetInstance();
