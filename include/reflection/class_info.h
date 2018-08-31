@@ -16,6 +16,9 @@
 #include "property_info.h"
 #include "static_function_info.h"
 
+// Library Includes
+#include <cpp_util/types/type_to_id.h>
+
 // System Includes
 #include <functional>
 #include <map>

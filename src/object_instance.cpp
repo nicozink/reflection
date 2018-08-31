@@ -44,10 +44,19 @@ int ObjectInstance::get_value<int>() const
 }
 
 template <>
+void ObjectInstance::set_value<bool>(bool& value)
+{
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<bool>::Get();
+
+	set_value<bool>(class_info, value);
+
+	type = ObjectType::Boolean;
+}
+
+template <>
 void ObjectInstance::set_value<float>(float& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<float>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<float>::Get();
 
 	set_value<float>(class_info, value);
 
@@ -57,8 +66,7 @@ void ObjectInstance::set_value<float>(float& value)
 template <>
 void ObjectInstance::set_value<int>(int& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<int>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<int>::Get();
 
 	set_value<int>(class_info, value);
 
@@ -68,8 +76,7 @@ void ObjectInstance::set_value<int>(int& value)
 template <>
 void ObjectInstance::set_value<std::string>(std::string& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<std::string>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<std::string>::Get();
 
 	set_value<std::string>(class_info, value);
 
@@ -77,10 +84,19 @@ void ObjectInstance::set_value<std::string>(std::string& value)
 }
 
 template <>
+void ObjectInstance::set_value<bool>(bool&& value)
+{
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<bool>::Get();
+
+	set_value<bool>(class_info, value);
+
+	type = ObjectType::Boolean;
+}
+
+template <>
 void ObjectInstance::set_value<float>(float&& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<float>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<float>::Get();
 
 	set_value<float>(class_info, value);
 
@@ -90,8 +106,7 @@ void ObjectInstance::set_value<float>(float&& value)
 template <>
 void ObjectInstance::set_value<int>(int&& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<int>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<int>::Get();
 
 	set_value<int>(class_info, value);
 
@@ -101,8 +116,7 @@ void ObjectInstance::set_value<int>(int&& value)
 template <>
 void ObjectInstance::set_value<std::string>(std::string&& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<std::string>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<std::string>::Get();
 
 	set_value<std::string>(class_info, value);
 

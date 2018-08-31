@@ -13,7 +13,7 @@
 #include <cpp_util/types/variant_type_helper.h>
 
 // Project Includes
-#include <reflection/reflection.h>
+#include <reflection/reflection_class_info.h>
 
 // System Includes
 #include <memory>
@@ -28,6 +28,7 @@ public:
 	enum class ObjectType
 	{
 		Empty,
+		Boolean,
 		Float,
 		Integer,
 		Object,
@@ -77,6 +78,9 @@ T ObjectInstance::get_value() const
 }
 
 template <>
+void ObjectInstance::set_value<bool>(bool& value);
+
+template <>
 void ObjectInstance::set_value<float>(float& value);
 
 template <>
@@ -88,14 +92,16 @@ void ObjectInstance::set_value<std::string>(std::string& value);
 template <typename T>
 void ObjectInstance::set_value(T& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<T>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<T>::Get();
 
 	this->class_info = class_info;
 	this->value = VariantTypeHelper<T>::Create(value);
 
 	type = ObjectType::Object;
 }
+
+template <>
+void ObjectInstance::set_value<bool>(bool&& value);
 
 template <>
 void ObjectInstance::set_value<float>(float&& value);
@@ -109,11 +115,10 @@ void ObjectInstance::set_value<std::string>(std::string&& value);
 template <typename T>
 void ObjectInstance::set_value(T&& value)
 {
-	auto& reflection = Reflection::GetInstance();
-	std::shared_ptr<ClassInfo> class_info = reflection.get_class_info<T>();
+	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<T>::Get();
 
 	this->class_info = class_info;
-	this->value = VariantTypeHelper<T&&>::Create(std::move(value));
+	this->value = VariantTypeHelper<T>::Create(std::move(value));
 
 	type = ObjectType::Object;
 }
