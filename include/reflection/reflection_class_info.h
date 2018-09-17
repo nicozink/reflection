@@ -51,4 +51,28 @@ public:
     }
 };
 
+template <typename T>
+class ReflectionClassInfo<std::shared_ptr<T>>
+{
+public:
+
+	static std::shared_ptr<ClassInfo> Get()
+	{
+		auto& reflection = Reflection::GetInstance();
+		return reflection.get_class_info<T>();
+	}
+};
+
+template <typename T>
+class ReflectionClassInfo<std::shared_ptr<T>&>
+{
+public:
+
+	static std::shared_ptr<ClassInfo> Get()
+	{
+		auto& reflection = Reflection::GetInstance();
+		return reflection.get_class_info<T>();
+	}
+};
+
 #endif
