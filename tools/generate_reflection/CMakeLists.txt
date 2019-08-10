@@ -16,7 +16,7 @@ foreach(_source IN ITEMS ${SRC_MAIN})
 	source_group("${_group_path}" FILES "${_source}")
 endforeach()
 
-add_executable(generate_reflection ${SRC_MAIN})
+create_executable(generate_reflection tools ${SRC_MAIN})
 
 target_include_directories(generate_reflection
 	PRIVATE

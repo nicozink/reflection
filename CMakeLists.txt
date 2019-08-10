@@ -53,7 +53,7 @@ foreach(_source IN ITEMS ${SRC_MAIN} ${SRC_INTERFACE} ${SRC_TEST})
 	source_group("${_group_path}" FILES "${_source}")
 endforeach()
 
-add_library(reflection ${SRC_MAIN} ${SRC_INTERFACE})
+create_library(reflection library ${SRC_MAIN} ${SRC_INTERFACE})
 
 target_include_directories(reflection
 	PUBLIC
@@ -64,11 +64,11 @@ target_include_directories(reflection
 
 target_link_libraries(reflection cpp_util)
 
-add_library(reflection_tests ${SRC_TEST})
+create_library(reflection_tests tests ${SRC_TEST})
 
 target_link_libraries(reflection_tests reflection unittest)
 
-add_executable(reflection_test ${SRC_TEST})
+create_executable(reflection_test test ${SRC_TEST})
 
 target_link_libraries(reflection_test reflection unittest)
 
