@@ -1,8 +1,8 @@
-#include <filesystem>
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include <regex>
 
-namespace filesystem = std::experimental::filesystem;
+namespace filesystem = boost::filesystem;
 
 int main(int argc, char **argv)
 {
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 			{
 				auto file_path = entry.path();
 
-				std::ifstream file_input(file_path);
+				std::ifstream file_input(file_path.string());
 
 				std::string input_string;
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 	filesystem::path output_path(argv[1]);
 	filesystem::create_directories(output_path);
 
-	std::ofstream file_out(output_path.append("register_reflection.h"));
+	std::ofstream file_out(output_path.append("register_reflection.h").string());
 
 	for (auto& registered_class : registered_classes)
 	{

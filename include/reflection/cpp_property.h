@@ -52,7 +52,7 @@ public:
 	// Gets the property and places it onto the stack.
 	static ObjectInstance Get(ObjectInstance& inst, TProp prop)
 	{
-		T& object_instance = inst.get_value<T>();
+		T object_instance = inst.get_value<T>();
 		
 		ObjectInstance to_return;
 		to_return.set_value<TType>(object_instance.*prop);

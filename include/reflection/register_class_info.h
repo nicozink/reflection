@@ -66,8 +66,8 @@ public:
 	// Registers a value which belongs to this class.
 	// @param name The property name.
 	// @param value The value.
-	template <class TType>
-	RegisterClassInfo& register_value(const std::string name, TType value);
+	template <class TValue>
+	RegisterClassInfo& register_value(const std::string name, TValue value);
 
 private:
 
@@ -151,11 +151,11 @@ RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_static_method(const
 // @param name The property name.
 // @param value The value.
 template <class TType>
-template <class TValueType>
-RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_value(const std::string name, TValueType value)
+template <class TValue>
+RegisterClassInfo<TType>& RegisterClassInfo<TType>::register_value(const std::string name, TValue value)
 {
 	ObjectInstance object_value;
-	object_value.set_value<TValueType>(value);
+	object_value.set_value<TValue>(value);
 
 	class_info->add_value(name, object_value);
 

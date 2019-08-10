@@ -61,7 +61,7 @@ public:
 		// We construct a Lambda expression which will call
 		// the function once we have reconstructed the list
 		// of parameters.
-		auto call_function = [&to_return, function](Args... args)
+		auto call_function = [function](Args... args)
 		{
 			function(args...);
 		};

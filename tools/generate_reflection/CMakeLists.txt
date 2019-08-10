@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 PROJECT(generate_reflection VERSION 1.0.0)
 
+find_package(Boost REQUIRED COMPONENTS filesystem)
+
 set(SRC_MAIN
 	${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 
@@ -19,3 +21,7 @@ add_executable(generate_reflection ${SRC_MAIN})
 target_include_directories(generate_reflection
 	PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+target_link_libraries(generate_reflection Boost::filesystem)
+
+target_compile_features(generate_reflection PRIVATE cxx_std_17)

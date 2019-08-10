@@ -41,7 +41,7 @@ public:
 	// Creates the function info for the provided method.
 	static FunctionInfo Create(std::string name, TFunc function)
 	{
-		auto call_function = [function](ObjectInstance& inst, FunctionParameters params)->ObjectInstance {
+		auto call_function = [function](ObjectInstance inst, FunctionParameters params)->ObjectInstance {
 			ObjectInstance to_return = Call(inst, function, params);
 			return to_return;
 		};
@@ -63,7 +63,7 @@ public:
 		// We construct a Lambda expression which will call
 		// the function once we have reconstructed the list
 		// of parameters.
-		auto call_function = [&to_return, &inst, function](Args... args)
+		auto call_function = [&inst, function](Args... args)
 		{
 			TType& object_instance = inst.get_value<TType&>();
 			(object_instance.*function)(args...);
@@ -89,7 +89,7 @@ public:
 	// Creates the function info for the provided method.
 	static FunctionInfo Create(std::string name, TFunc function)
 	{
-		auto call_function = [function](ObjectInstance& inst, FunctionParameters params)->ObjectInstance {
+		auto call_function = [function](ObjectInstance inst, FunctionParameters params)->ObjectInstance {
 			ObjectInstance to_return = Call(inst, function, params);
 			return to_return;
 		};
