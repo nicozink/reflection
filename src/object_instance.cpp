@@ -10,9 +10,9 @@
 #include <reflection/class_info.h>
 
 ObjectInstance::ObjectInstance() :
-	class_info{ nullptr },
-	type{ ObjectInstance::ObjectType::Empty },
-	value{ VariantType::Null }
+	m_class_info{ nullptr },
+	m_type{ ObjectInstance::ObjectType::Empty },
+	m_value{ VariantType::Null }
 {
 
 }
@@ -20,26 +20,26 @@ ObjectInstance::ObjectInstance() :
 template <>
 float ObjectInstance::get_value<float>() const
 {
-	if (type == ObjectType::Integer)
+	if (m_type == ObjectType::Integer)
 	{
-		return (float)value.get<int>();
+		return (float)m_value.get<int>();
 	}
 	else
 	{
-		return value.get<float>();
+		return m_value.get<float>();
 	}
 }
 
 template <>
 int ObjectInstance::get_value<int>() const
 {
-	if (type == ObjectType::Float)
+	if (m_type == ObjectType::Float)
 	{
-		return (int)value.get<float>();
+		return (int)m_value.get<float>();
 	}
 	else
 	{
-		return value.get<int>();
+		return m_value.get<int>();
 	}
 }
 
@@ -50,7 +50,7 @@ void ObjectInstance::set_value<bool>(bool& value)
 
 	set_value<bool>(class_info, value);
 
-	type = ObjectType::Boolean;
+	m_type = ObjectType::Boolean;
 }
 
 template <>
@@ -60,7 +60,7 @@ void ObjectInstance::set_value<float>(float& value)
 
 	set_value<float>(class_info, value);
 
-	type = ObjectType::Float;
+	m_type = ObjectType::Float;
 }
 
 template <>
@@ -70,7 +70,7 @@ void ObjectInstance::set_value<int>(int& value)
 
 	set_value<int>(class_info, value);
 
-	type = ObjectType::Integer;
+	m_type = ObjectType::Integer;
 }
 
 template <>
@@ -80,7 +80,7 @@ void ObjectInstance::set_value<std::string>(std::string& value)
 
 	set_value<std::string>(class_info, value);
 
-	type = ObjectType::String;
+	m_type = ObjectType::String;
 }
 
 template <>
@@ -90,7 +90,7 @@ void ObjectInstance::set_value<bool>(bool&& value)
 
 	set_value<bool>(class_info, value);
 
-	type = ObjectType::Boolean;
+	m_type = ObjectType::Boolean;
 }
 
 template <>
@@ -100,7 +100,7 @@ void ObjectInstance::set_value<float>(float&& value)
 
 	set_value<float>(class_info, value);
 
-	type = ObjectType::Float;
+	m_type = ObjectType::Float;
 }
 
 template <>
@@ -110,7 +110,7 @@ void ObjectInstance::set_value<int>(int&& value)
 
 	set_value<int>(class_info, value);
 
-	type = ObjectType::Integer;
+	m_type = ObjectType::Integer;
 }
 
 template <>
@@ -120,19 +120,19 @@ void ObjectInstance::set_value<std::string>(std::string&& value)
 
 	set_value<std::string>(class_info, value);
 
-	type = ObjectType::String;
+	m_type = ObjectType::String;
 }
 
 ObjectInstance::ObjectType ObjectInstance::get_type()
 {
-	return type;
+	return m_type;
 }
 
 std::string ObjectInstance::get_type_name()
 {
-	if (class_info != nullptr)
+	if (m_class_info != nullptr)
 	{
-		return class_info->get_type_name();
+		return m_class_info->get_type_name();
 	}
 	else
 	{

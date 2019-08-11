@@ -45,11 +45,11 @@ public:
 
 private:
 
-	GetProperty function_get;
+	GetProperty m_function_get;
 	
-	SetProperty function_set;
+	SetProperty m_function_set;
 
-	std::string parameter_name;
+	std::string m_parameter_name;
 };
 
 #endif

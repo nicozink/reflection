@@ -58,11 +58,11 @@ public:
 
 private:
 
-	std::shared_ptr<ClassInfo> class_info;
+	std::shared_ptr<ClassInfo> m_class_info;
 
-	ObjectType type;
+	ObjectType m_type;
 
-	VariantType value;
+	VariantType m_value;
 };
 
 template <>
@@ -74,7 +74,7 @@ int ObjectInstance::get_value<int>() const;
 template <typename T>
 T ObjectInstance::get_value() const
 {
-	return value.get<T>();
+	return m_value.get<T>();
 }
 
 template <>
@@ -94,10 +94,10 @@ void ObjectInstance::set_value(T& value)
 {
 	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<T>::Get();
 
-	this->class_info = class_info;
-	this->value = VariantTypeHelper<T>::Create(value);
+	m_class_info = class_info;
+	m_value = VariantTypeHelper<T>::Create(value);
 
-	type = ObjectType::Object;
+	m_type = ObjectType::Object;
 }
 
 template <>
@@ -117,24 +117,24 @@ void ObjectInstance::set_value(T&& value)
 {
 	std::shared_ptr<ClassInfo> class_info = ReflectionClassInfo<T>::Get();
 
-	this->class_info = class_info;
-	this->value = VariantTypeHelper<T>::Create(std::move(value));
+	m_class_info = class_info;
+	m_value = VariantTypeHelper<T>::Create(std::move(value));
 
-	type = ObjectType::Object;
+	m_type = ObjectType::Object;
 }
 
 template <typename T>
 void ObjectInstance::set_value(std::shared_ptr<ClassInfo> class_info, T& value)
 {
-	this->class_info = class_info;
-	this->value = VariantTypeHelper<T>::Create(value);
+	m_class_info = class_info;
+	m_value = VariantTypeHelper<T>::Create(value);
 }
 
 template <typename T>
 void ObjectInstance::set_value(std::shared_ptr<ClassInfo> class_info, T&& value)
 {
-	this->class_info = class_info;
-	this->value = VariantTypeHelper<T&&>::Create(std::move(value));
+	m_class_info = class_info;
+	m_value = VariantTypeHelper<T&&>::Create(std::move(value));
 }
 
 #endif

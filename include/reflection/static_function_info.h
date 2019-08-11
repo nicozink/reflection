@@ -48,13 +48,13 @@ public:
 
 private:
 
-	Function function;
+	Function m_function;
 
-	std::string function_name;
+	std::string m_function_name;
 
-	bool has_return;
+	bool m_has_return;
 	
-	int parameter_count;
+	int m_parameter_count;
 };
 
 #endif
