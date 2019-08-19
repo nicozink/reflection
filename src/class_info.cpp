@@ -16,8 +16,10 @@ std::shared_ptr<ClassInfo> ClassInfo::Undefined = std::make_shared<ClassInfo>("U
 // Constructor
 //
 
-ClassInfo::ClassInfo(std::string type_name, TypeToId::type_id type_id)
-: type_name{ type_name }, type_id{ type_id }
+ClassInfo::ClassInfo(std::string type_name, TypeToId::type_id type_id) :
+	has_constructor{ false },
+	type_name { type_name },
+	type_id{ type_id }
 {
 
 }
