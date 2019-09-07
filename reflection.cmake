@@ -18,5 +18,5 @@ function(generate_reflection_data library_name output_dir)
 
 	set_target_properties(generate_reflection_${library_name} PROPERTIES FOLDER custom)
 
-	add_dependencies(darkentity_example generate_reflection_${library_name})
+	add_dependencies(${library_name} generate_reflection_${library_name})
 endfunction()
