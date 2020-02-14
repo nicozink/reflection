@@ -38,7 +38,7 @@ template<typename... Args>
 struct CppParameters<0, Args...>
 {
   template <typename... ArgsCumul>
-  static void Call(std::function<void(Args...)> function, FunctionParameters params, ArgsCumul... args)
+  static void Call(std::function<void(Args...)> function, [[maybe_unused]] FunctionParameters params, ArgsCumul... args)
   {
     function(args...);
   }
