@@ -11,7 +11,7 @@ FunctionParameters::FunctionParameters()
 
 }
 
-ObjectInstance FunctionParameters::operator[](int i)
+ObjectInstance FunctionParameters::operator[](size_t i)
 {
 	return values[i];
 }

@@ -30,7 +30,7 @@ public:
 	// Operators
 	//
 
-	ObjectInstance operator[](int i);
+	ObjectInstance operator[](size_t i);
 
 	//
 	// Public Methods
