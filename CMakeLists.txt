@@ -1,14 +1,18 @@
 cmake_minimum_required(VERSION 3.0)
 
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/cmake/cmake_utils.cmake)
+	include(${CMAKE_CURRENT_SOURCE_DIR}/build_tools/cmake/cmake_utils.cmake)
+endif()
+
 PROJECT(reflection VERSION 1.0.0)
 
 enable_testing()
 
-if (EXISTS libraries/cpp_util/CMakeLists.txt)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cpp_util/CMakeLists.txt)
 	add_subdirectory(libraries/cpp_util)
 endif()
 
-if (EXISTS libraries/unittest/CMakeLists.txt)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/libraries/unittest/CMakeLists.txt)
 	add_subdirectory(libraries/unittest)
 endif()
 
@@ -72,5 +76,8 @@ create_executable(reflection_test test ${SRC_TEST})
 
 target_link_libraries(reflection_test reflection unittest)
 
-add_test(NAME reflection_test
-	COMMAND reflection_test)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+	add_test(NAME reflection_test COMMAND ${NODE_JS} "${CMAKE_CURRENT_BINARY_DIR}/reflection_test.js")
+else ()
+	add_test(NAME reflection_test COMMAND reflection_test)
+endif ()
