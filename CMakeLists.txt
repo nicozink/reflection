@@ -1,22 +1,13 @@
 cmake_minimum_required(VERSION 3.0)
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/cmake/cmake_utils.cmake)
-	include(${CMAKE_CURRENT_SOURCE_DIR}/build_tools/cmake/cmake_utils.cmake)
-endif()
+include(${LIBRARY_FOLDER}/build_tools/cmake/cmake_utils.cmake)
 
 PROJECT(reflection VERSION 1.0.0)
 
 enable_testing()
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cpp_util/CMakeLists.txt)
-	add_subdirectory(libraries/cpp_util)
-endif()
-
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/libraries/unittest/CMakeLists.txt)
-	add_subdirectory(libraries/unittest)
-endif()
-
-add_subdirectory(tools/generate_reflection)
+import_library(cpp_util)
+import_library(unittest)
 
 set(SRC_INTERFACE
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/class_info.h
