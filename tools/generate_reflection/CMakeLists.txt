@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
+include(${LIBRARY_FOLDER}/build_tools/cmake/cmake_utils.cmake)
+
 PROJECT(generate_reflection VERSION 1.0.0)
 
 find_package(Boost REQUIRED COMPONENTS filesystem)
@@ -25,3 +27,9 @@ target_include_directories(generate_reflection
 target_link_libraries(generate_reflection Boost::filesystem)
 
 target_compile_features(generate_reflection PRIVATE cxx_std_17)
+
+install(TARGETS generate_reflection
+        CONFIGURATIONS Release
+        RUNTIME DESTINATION bin
+		LIBRARY DESTINATION bin
+    	ARCHIVE DESTINATION bin)

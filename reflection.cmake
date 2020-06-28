@@ -10,7 +10,7 @@ function(generate_reflection_data library_name output_dir)
 	message(STATUS "creating reflection with list ${reflection_library_sources}")
 
 	add_custom_target(generate_reflection_${library_name}
-		COMMAND generate_reflection ${output_dir} ${reflection_library_sources}
+		COMMAND ${CMAKE_INSTALL_PREFIX}/bin/generate_reflection ${output_dir} ${reflection_library_sources}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		COMMENT "run generated generate_reflection_${library_name} in ${CMAKE_CURRENT_SOURCE_DIR}"
 		SOURCES ${generate_reflection_SOURCES}
