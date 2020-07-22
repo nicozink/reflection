@@ -29,7 +29,7 @@ target_link_libraries(generate_reflection Boost::filesystem)
 target_compile_features(generate_reflection PRIVATE cxx_std_17)
 
 install(TARGETS generate_reflection
-        CONFIGURATIONS Release
+        CONFIGURATIONS Debug Release
         RUNTIME DESTINATION bin
 		LIBRARY DESTINATION bin
     	ARCHIVE DESTINATION bin)
