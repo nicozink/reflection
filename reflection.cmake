@@ -6,15 +6,32 @@ function(reflection_add_path path)
 	message(STATUS "adding ${path}, new list ${reflection_library_sources}")
 endfunction()
 
-function(generate_reflection_data library_name output_dir)
-	message(STATUS "creating reflection with list ${reflection_library_sources}")
+function(add_reflection_path target folder sources)
+	set_target_properties(${target} PROPERTIES "REFLECTION_FOLDER" ${folder})
+	set_target_properties(${target} PROPERTIES "REFLECTION_SOURCES" "${sources}")
+endfunction()
 
-	add_custom_target(generate_reflection_${library_name}
-		COMMAND ${CMAKE_INSTALL_PREFIX}/bin/generate_reflection ${output_dir} ${reflection_library_sources}
+function(generate_reflection_data library_name output_dir reflection_libs)
+	set(REFLECTION_PATHS )
+	set(REFLECTION_SOURCES )
+
+	foreach(library IN ITEMS ${reflection_libs})
+		get_target_property(reflection_folder ${library} "REFLECTION_FOLDER")
+		get_target_property(reflection_source ${library} "REFLECTION_SOURCES")
+
+		list(APPEND REFLECTION_PATHS ${reflection_folder})
+		list(APPEND REFLECTION_SOURCES ${reflection_source})
+	endforeach()
+	
+	add_custom_command(
+		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/include/generated/reflection/register_reflection.h
+		COMMAND ${CMAKE_INSTALL_PREFIX}/bin/generate_reflection ${output_dir} ${REFLECTION_PATHS}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		COMMENT "run generated generate_reflection_${library_name} in ${CMAKE_CURRENT_SOURCE_DIR}"
-		SOURCES ${generate_reflection_SOURCES}
+		COMMENT "${CMAKE_INSTALL_PREFIX}/bin/generate_reflection ${output_dir} ${REFLECTION_PATHS}"
+		DEPENDS ${REFLECTION_SOURCES}
 	)
+
+	add_custom_target(generate_reflection_${library_name} DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/generated/include/generated/reflection/register_reflection.h)
 
 	set_target_properties(generate_reflection_${library_name} PROPERTIES FOLDER custom)
 
