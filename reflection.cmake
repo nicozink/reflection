@@ -13,7 +13,7 @@ endfunction()
 
 function(generate_reflection_data library_name output_dir reflection_libs)
 	set(REFLECTION_PATHS )
-	set(REFLECTION_SOURCES )
+	set(REFLECTION_SOURCES generate_reflection)
 
 	foreach(library IN ITEMS ${reflection_libs})
 		get_target_property(reflection_folder ${library} "REFLECTION_FOLDER")
@@ -25,9 +25,9 @@ function(generate_reflection_data library_name output_dir reflection_libs)
 	
 	add_custom_command(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/include/generated/reflection/register_reflection.h
-		COMMAND ${CMAKE_INSTALL_PREFIX}/bin/generate_reflection ${output_dir} ${REFLECTION_PATHS}
+		COMMAND generate_reflection ${output_dir} ${REFLECTION_PATHS}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		COMMENT "${CMAKE_INSTALL_PREFIX}/bin/generate_reflection ${output_dir} ${REFLECTION_PATHS}"
+		COMMENT "generate_reflection ${output_dir} ${REFLECTION_PATHS}"
 		DEPENDS ${REFLECTION_SOURCES}
 	)
 

@@ -9,6 +9,8 @@ enable_testing()
 import_library(cpp_util)
 import_library(unittest)
 
+add_subdirectory(tools/generate_reflection generate_reflection)
+
 set(SRC_INTERFACE
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/class_info.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/reflection/cpp_function.h
